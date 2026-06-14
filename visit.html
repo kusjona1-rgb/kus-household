@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Dave's Visit • June 25–28</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+:root {
+  --sky: #1D6FA4;
+  --ocean: #0A5C8A;
+  --sun: #F59E0B;
+  --sand: #FDF6E3;
+  --palm: #2D6A4F;
+  --coral: #C2410C;
+  --ink: #111827;
+  --gray: #6B7280;
+  --border: #E5E7EB;
+  --light: #F3F4F6;
+  --yes: #16A34A;
+  --maybe: #D97706;
+  --no: #DC2626;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--sand);
+  color: var(--ink);
+  min-height: 100vh;
+  max-width: 480px;
+  margin: 0 auto;
+  padding-bottom: 60px;
+}
+
+/* HEADER */
+.hdr {
+  background: linear-gradient(135deg, var(--ocean) 0%, var(--sky) 55%, var(--sun) 100%);
+  color: #fff;
+  padding: 24px 20px 18px;
+  text-align: center;
+}
+.hdr-eye { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; opacity: .8; margin-bottom: 4px; }
+.hdr-title { font-size: 28px; font-weight: 800; line-height: 1.1; margin: 4px 0 8px; }
+.hdr-sub { font-size: 13px; opacity: .9; margin-bottom: 12px; }
+.crew { display: flex; justify-content: center; gap: 8px; }
+.crew-chip { background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.3); color: #fff; border-radius: 20px; padding: 4px 14px; font-size: 13px; font-weight: 600; }
+
+/* STATUS BAR */
+#statusBar { padding: 6px 14px; font-size: 12px; font-weight: 600; text-align: center; display: none; }
+.status-saving { background: #FEF3C7; color: #92400E; display: block !important; }
+.status-error { background: #FEE2E2; color: #991B1B; display: block !important; }
+
+/* TABS */
+.tabs {
+  display: flex; background: #fff; border-bottom: 2px solid var(--border);
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,.07);
+}
+.tab {
+  flex: 1; padding: 11px 4px; text-align: center; font-size: 11px; font-weight: 700;
+  color: var(--gray); cursor: pointer; border-bottom: 3px solid transparent;
+  user-select: none;
+}
+.tab.on { color: var(--sky); border-bottom-color: var(--sky); }
+.tab-icon { font-size: 17px; display: block; margin-bottom: 2px; }
+
+/* PANELS */
+.panel { display: none; padding: 14px; }
+.panel.on { display: block; }
+
+/* VOTER SELECTOR */
+.voter-prompt { text-align: center; font-size: 12px; color: var(--gray); font-weight: 600; margin-bottom: 10px; }
+.voter-row { display: flex; gap: 8px; margin-bottom: 14px; justify-content: center; }
+.voter-btn {
+  flex: 1; max-width: 90px; padding: 10px 6px;
+  border: 2px solid var(--border); border-radius: 12px; background: #fff;
+  font-size: 13px; font-weight: 700; cursor: pointer; text-align: center;
+  transition: all .15s;
+}
+.voter-btn .vi { font-size: 22px; display: block; margin-bottom: 3px; }
+.voter-btn.on-Jon  { border-color: #DC2626; background: #DC2626; color: #fff; }
+.voter-btn.on-Dave { border-color: #2563EB; background: #2563EB; color: #fff; }
+.voter-btn.on-Max  { border-color: #16A34A; background: #16A34A; color: #fff; }
+
+/* REFRESH BTN */
+.refresh-btn {
+  display: flex; align-items: center; gap: 6px; margin: 0 auto 16px;
+  background: #fff; border: 1.5px solid var(--border); border-radius: 20px;
+  padding: 7px 18px; font-size: 13px; font-weight: 700; cursor: pointer; color: var(--sky);
+  font-family: inherit;
+}
+
+/* DAY BLOCKS */
+.day-block { margin-bottom: 22px; }
+.day-hdr { color: #fff; border-radius: 14px 14px 0 0; padding: 12px 16px; }
+.day-label { font-size: 19px; font-weight: 800; }
+.day-sub { font-size: 11px; opacity: .8; margin-top: 2px; font-weight: 600; letter-spacing: .5px; }
+.day-note { background: rgba(255,255,255,.15); border-radius: 6px; padding: 5px 10px; font-size: 12px; margin-top: 7px; font-style: italic; }
+.day-list { border: 2px solid; border-top: none; border-radius: 0 0 14px 14px; background: #fff; }
+
+/* ACTIVITY CARD */
+.act-card { padding: 14px 14px 12px; border-bottom: 1px solid var(--border); }
+.act-card:last-child { border-bottom: none; }
+.act-name { font-weight: 700; font-size: 15px; margin-bottom: 3px; }
+.act-meta { font-size: 12px; color: var(--gray); display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-bottom: 6px; }
+.type-tag { padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 700; }
+.act-note { font-size: 12px; color: var(--gray); margin-bottom: 8px; line-height: 1.45; }
+
+/* VOTE BUTTONS */
+.vote-row { display: flex; gap: 6px; margin-bottom: 8px; }
+.vote-btn {
+  flex: 1; padding: 8px 4px; border: 2px solid var(--border); border-radius: 10px;
+  background: #fff; font-size: 13px; font-weight: 700; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  font-family: inherit; transition: all .12s;
+}
+.vote-btn .ve { font-size: 17px; }
+.vote-btn .vc { font-size: 11px; }
+.vote-btn.yes-on { border-color: var(--yes); background: var(--yes); color: #fff; }
+.vote-btn.maybe-on { border-color: var(--maybe); background: var(--maybe); color: #fff; }
+.vote-btn.no-on { border-color: var(--no); background: var(--no); color: #fff; }
+
+/* VOTER TAGS */
+.vtags { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 6px; min-height: 4px; }
+.vtag { font-size: 11px; font-weight: 700; border-radius: 8px; padding: 2px 8px; }
+.vtag-yes { background: #DCFCE7; color: #166534; }
+.vtag-maybe { background: #FEF3C7; color: #92400E; }
+.vtag-no { background: #FEE2E2; color: #991B1B; }
+
+/* COMMENTS */
+.comments-toggle { font-size: 12px; color: var(--sky); font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 4px; margin-bottom: 4px; }
+.comments-area { display: none; }
+.comments-area.open { display: block; }
+.comment-item { background: var(--light); border-radius: 8px; padding: 8px 10px; margin-bottom: 6px; }
+.comment-author { font-weight: 700; font-size: 11px; margin-bottom: 2px; color: var(--ocean); }
+.comment-body { font-size: 13px; }
+.comment-input-row { display: flex; gap: 6px; margin-top: 6px; }
+.comment-input {
+  flex: 1; border: 1.5px solid var(--border); border-radius: 8px;
+  padding: 8px 10px; font-size: 13px; font-family: inherit; background: #fff;
+}
+.comment-submit {
+  background: var(--sky); color: #fff; border: none; border-radius: 8px;
+  padding: 8px 14px; font-size: 14px; font-weight: 700; cursor: pointer;
+}
+
+/* AGENDA */
+.ag-slot { display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start; }
+.ag-time { font-size: 11px; font-weight: 700; color: var(--gray); min-width: 52px; text-align: right; padding-top: 3px; }
+.ag-dot-col { display: flex; flex-direction: column; align-items: center; min-width: 16px; }
+.ag-dot { width: 11px; height: 11px; border-radius: 50%; margin-top: 3px; flex-shrink: 0; }
+.ag-line { width: 2px; background: var(--border); flex: 1; min-height: 16px; }
+.ag-content { flex: 1; background: var(--light); border-radius: 10px; padding: 9px 12px; border: 1.5px solid var(--border); }
+.ag-content.locked { border-color: #86EFAC; }
+.ag-event { font-weight: 700; font-size: 14px; }
+.ag-note { font-size: 12px; color: var(--gray); margin-top: 2px; }
+.status-pill { font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 2px 7px; border-radius: 6px; margin-left: 6px; }
+.pill-locked { background: #DCFCE7; color: #166534; }
+.pill-tbd { background: #FEF3C7; color: #92400E; }
+
+/* IDEAS FORM */
+.idea-card { background: #fff; border: 2px dashed var(--sky); border-radius: 14px; padding: 16px; margin-bottom: 18px; }
+.card-title { font-size: 17px; font-weight: 800; color: var(--ocean); margin-bottom: 3px; }
+.card-sub { font-size: 13px; color: var(--gray); margin-bottom: 14px; }
+.form-row { margin-bottom: 10px; }
+.form-label { font-size: 11px; font-weight: 700; display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: .5px; }
+.form-ctrl {
+  width: 100%; border: 1.5px solid var(--border); border-radius: 10px;
+  padding: 10px 12px; font-size: 14px; font-family: inherit; background: #fff;
+}
+textarea.form-ctrl { min-height: 60px; resize: vertical; }
+.add-btn {
+  width: 100%; padding: 13px; background: var(--sky); color: #fff; border: none;
+  border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer;
+  font-family: inherit;
+}
+
+/* IDEAS LIST */
+.idea-item { background: #fff; border: 1.5px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 10px; }
+.idea-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px; }
+.idea-name { font-weight: 700; font-size: 15px; }
+.idea-by { font-size: 11px; font-weight: 700; background: var(--light); padding: 3px 8px; border-radius: 8px; color: var(--gray); flex-shrink: 0; margin-left: 8px; }
+.idea-day { font-size: 12px; color: var(--gray); margin-bottom: 3px; }
+.idea-notes { font-size: 13px; color: var(--gray); line-height: 1.45; }
+
+/* LOGISTICS */
+.log-section { background: #fff; border-radius: 14px; border: 2px solid var(--border); overflow: hidden; margin-bottom: 18px; }
+.log-hdr { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+.log-hdr-icon { font-size: 22px; }
+.log-hdr-title { font-size: 16px; font-weight: 800; }
+.log-body { padding: 10px 12px; }
+.log-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px; background: var(--light); border-radius: 10px; margin-bottom: 8px; }
+.log-item:last-child { margin-bottom: 0; }
+.log-item.done-item { opacity: .55; }
+.log-item-text { flex: 1; }
+.log-item-name { font-weight: 600; font-size: 14px; }
+.log-item-name.struck { text-decoration: line-through; }
+.log-item-who { font-size: 11px; color: var(--gray); margin-top: 2px; }
+.done-btn {
+  font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 8px;
+  cursor: pointer; flex-shrink: 0; font-family: inherit;
+}
+.done-btn.pending { background: var(--light); color: var(--gray); border: 1.5px solid var(--border); }
+.done-btn.done { background: var(--yes); color: #fff; border: none; }
+.log-add-row { display: flex; gap: 6px; padding: 10px 12px; border-top: 1px solid var(--border); background: var(--sand); }
+.log-add-input { flex: 1; border: 1.5px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 13px; font-family: inherit; background: #fff; }
+.log-add-btn { background: var(--sky); color: #fff; border: none; border-radius: 8px; padding: 8px 14px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; }
+
+/* SECTION DIVIDER */
+.sec-label { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray); margin: 16px 0 10px; }
+
+/* EMPTY STATE */
+.empty { text-align: center; padding: 28px 0; color: var(--gray); }
+.empty-icon { font-size: 36px; margin-bottom: 10px; }
+.empty-text { font-size: 13px; }
+
+/* TOAST */
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+  background: var(--ink); color: #fff; padding: 10px 22px; border-radius: 99px;
+  font-size: 13px; font-weight: 700; z-index: 9999; white-space: nowrap;
+  box-shadow: 0 4px 24px rgba(0,0,0,.3); transition: transform .25s ease; pointer-events: none;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-eye">South Florida · June 25–28, 2026</div>
+  <div class="hdr-title">Dave's Visit 🏌️</div>
+  <div class="hdr-sub">3 nights. The crew. Let's plan it.</div>
+  <div class="crew">
+    <span class="crew-chip">🔴 Jon</span>
+    <span class="crew-chip">🔵 Dave</span>
+    <span class="crew-chip">🟢 Max</span>
+  </div>
+</div>
+
+<div id="statusBar"></div>
+
+<div class="tabs">
+  <div class="tab on" onclick="switchTab('vote',this)"><span class="tab-icon">🗳️</span>VOTE</div>
+  <div class="tab" onclick="switchTab('agenda',this)"><span class="tab-icon">📅</span>AGENDA</div>
+  <div class="tab" onclick="switchTab('ideas',this)"><span class="tab-icon">💡</span>IDEAS</div>
+  <div class="tab" onclick="switchTab('logistics',this)"><span class="tab-icon">✅</span>TO-DO</div>
+</div>
+
+<!-- ══════════════ VOTE PANEL ══════════════ -->
+<div class="panel on" id="panel-vote">
+  <div class="voter-prompt">Who's voting right now?</div>
+  <div class="voter-row">
+    <button class="voter-btn" id="vbtn-Jon"  onclick="setVoter('Jon')">  <span class="vi">🔴</span>Jon</button>
+    <button class="voter-btn" id="vbtn-Dave" onclick="setVoter('Dave')"> <span class="vi">🔵</span>Dave</button>
+    <button class="voter-btn" id="vbtn-Max"  onclick="setVoter('Max')">  <span class="vi">🟢</span>Max</button>
+  </div>
+  <button class="refresh-btn" onclick="loadAll(true)">🔄 Refresh votes &amp; comments</button>
+  <div id="vote-days"></div>
+</div>
+
+<!-- ══════════════ AGENDA PANEL ══════════════ -->
+<div class="panel" id="panel-agenda">
+  <div id="agenda-content"></div>
+</div>
+
+<!-- ══════════════ IDEAS PANEL ══════════════ -->
+<div class="panel" id="panel-ideas">
+  <div class="idea-card">
+    <div class="card-title">💡 Drop an Idea</div>
+    <div class="card-sub">Activity, restaurant, anything — throw it in.</div>
+    <div class="form-row">
+      <label class="form-label">Your name</label>
+      <select class="form-ctrl" id="idea-who">
+        <option value="">Select...</option>
+        <option>Jon</option><option>Dave</option><option>Max</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Idea name</label>
+      <input class="form-ctrl" id="idea-name" placeholder="e.g. Canes Rooftop Bar...">
+    </div>
+    <div class="form-row">
+      <label class="form-label">Type</label>
+      <select class="form-ctrl" id="idea-type">
+        <option value="activity">Activity</option>
+        <option value="food">Food / Restaurant</option>
+        <option value="supply">Supply / Item</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Best day / time</label>
+      <input class="form-ctrl" id="idea-day" placeholder="e.g. Saturday evening, anytime...">
+    </div>
+    <div class="form-row">
+      <label class="form-label">Notes (optional)</label>
+      <textarea class="form-ctrl" id="idea-notes" placeholder="Any details, links, context..."></textarea>
+    </div>
+    <button class="add-btn" onclick="submitIdea()">Add My Idea ✦</button>
+  </div>
+  <button class="refresh-btn" onclick="loadAll(true)">🔄 Refresh ideas</button>
+  <div class="sec-label">Submitted Ideas</div>
+  <div id="ideas-list"></div>
+</div>
+
+<!-- ══════════════ LOGISTICS PANEL ══════════════ -->
+<div class="panel" id="panel-logistics">
+  <button class="refresh-btn" onclick="loadAll(true)">🔄 Refresh to-do list</button>
+
+  <div class="log-section">
+    <div class="log-hdr"><span class="log-hdr-icon">🛒</span><span class="log-hdr-title">Food &amp; Supplies to Get</span></div>
+    <div class="log-body" id="log-supply"></div>
+    <div class="log-add-row">
+      <input class="log-add-input" id="inp-supply" placeholder="Add supply or food item..." onkeydown="if(event.key==='Enter')addLogItem('supply')">
+      <button class="log-add-btn" onclick="addLogItem('supply')">+ Add</button>
+    </div>
+  </div>
+
+  <div class="log-section">
+    <div class="log-hdr"><span class="log-hdr-icon">📞</span><span class="log-hdr-title">Reservations &amp; Bookings</span></div>
+    <div class="log-body" id="log-reservation"></div>
+    <div class="log-add-row">
+      <input class="log-add-input" id="inp-reservation" placeholder="e.g. Osprey Point tee time..." onkeydown="if(event.key==='Enter')addLogItem('reservation')">
+      <button class="log-add-btn" onclick="addLogItem('reservation')">+ Add</button>
+    </div>
+  </div>
+
+  <div class="log-section">
+    <div class="log-hdr"><span class="log-hdr-icon">📋</span><span class="log-hdr-title">General To-Do</span></div>
+    <div class="log-body" id="log-todo"></div>
+    <div class="log-add-row">
+      <input class="log-add-input" id="inp-todo" placeholder="Add a task..." onkeydown="if(event.key==='Enter')addLogItem('todo')">
+      <button class="log-add-btn" onclick="addLogItem('todo')">+ Add</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════════
+//  CONFIG
+// ══════════════════════════════════════════════════════
+const SB_URL = 'https://erbehfbmvemlwnzlesxw.supabase.co/rest/v1';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVyYmVoZmJtdmVtbHduemxlc3h3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzNjM1NTAsImV4cCI6MjA5NTkzOTU1MH0.X50PXOWS8RazO7PVs-MPHwtqPqZ4GRl9I7PkQm9aTY0';
+const HEADERS = { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json' };
+
+async function api(path, opts = {}) {
+  const res = await fetch(`${SB_URL}/${path}`, {
+    headers: { ...HEADERS, ...(opts.headers || {}) },
+    ...opts
+  });
+  const text = await res.text();
+  if (!res.ok) throw new Error(text || res.status);
+  return text ? JSON.parse(text) : null;
+}
+
+// ══════════════════════════════════════════════════════
+//  STATIC DATA
+// ══════════════════════════════════════════════════════
+const ACTIVITIES = [
+  { id:'a1',  day:'thu', name:'Osprey Point Sunset Golf',           time:'Thu evening (~4pm+)',   type:'golf',     note:'Sunset round — scenic. Dave just arrived, get the crew out!' },
+  { id:'a2',  day:'thu', name:'Pool Hang + Travelers Championship', time:'Thu afternoon',         type:'chill',    note:'Max hosts while Jon finishes work. Chill start to the trip.' },
+  { id:'a3',  day:'thu', name:'World Cup Watch Party',              time:'Thu night',             type:'sports',   note:'Check match schedule — kick back after day one.' },
+  { id:'a4',  day:'fri', name:'Disclosure Day (Movie)',             time:'Fri afternoon',         type:'movie',    note:'⚠️ Possibly without Jon — Dave & Max catch this while Jon works.' },
+  { id:'a5',  day:'fri', name:'Pool + Travelers Championship',      time:'Fri afternoon',         type:'chill',    note:'Relax poolside, watch the tournament.' },
+  { id:'a6',  day:'fri', name:'Boynton Links Family Course',        time:'Fri evening (~4pm+)',   type:'golf',     note:'Casual course — quick evening round once Jon is free.' },
+  { id:'a7',  day:'fri', name:'PopStroke Mini Golf',                time:'Fri night (or Sat)',    type:'activity', note:'Fun group vibe, food & drinks on site. Works either night.' },
+  { id:'a8',  day:'fri', name:'Hawkers Dinner (with Tara)',         time:'Fri night',             type:'food',     note:'Asian street food — great spot. Include Tara for dinner.' },
+  { id:'a9',  day:'sat', name:'Austin Republic BBQ',                time:'Sat afternoon',         type:'food',     note:'Load up before hitting the course. Texas-style BBQ.' },
+  { id:'a10', day:'sat', name:'PBS Virtual Experience',             time:'Sat afternoon',         type:'activity', note:'Napoleon or Coliseum — vote to pick! Immersive and cool.' },
+  { id:'a11', day:'sat', name:'Palm Beach Par 3 ⛳',               time:'Sat evening',           type:'golf',     note:'Iconic oceanside par 3. Best sunset round in South Florida.' },
+  { id:'a12', day:'sat', name:'PopStroke Mini Golf',                time:'Sat night (or Fri)',    type:'activity', note:'If not Friday, Saturday night works great. Late hours, great vibe.' },
+  { id:'a13', day:'sat', name:'World Cup Watch Party',              time:'Sat night',             type:'sports',   note:'Check schedule for a good match.' },
+  { id:'a14', day:'sun', name:'Low-key Morning / Farewell Brunch', time:'Sun morning',           type:'chill',    note:'Relaxed send-off before Dave heads to the airport.' },
+];
+
+const DAYS = [
+  { key:'thu', label:'Thursday, June 25', sub:'ARRIVAL DAY · Dave lands at noon',   note:'Jon works until ~4pm · Max is free',          color:'#0A5C8A' },
+  { key:'fri', label:'Friday, June 26',   sub:'FULL DAY',                            note:'Jon works until ~4pm · Max is free all day',  color:'#2D6A4F' },
+  { key:'sat', label:'Saturday, June 27', sub:'THE BIG DAY · Everyone free!',        note:'',                                             color:'#C2410C' },
+  { key:'sun', label:'Sunday, June 28',   sub:'DEPARTURE · Dave leaves afternoon',   note:'',                                             color:'#4B5563' },
+];
+
+const TYPE_META = {
+  golf:     { icon:'⛳', bg:'#DCFCE7', color:'#166534' },
+  food:     { icon:'🍽️', bg:'#FEF3C7', color:'#92400E' },
+  activity: { icon:'🎯', bg:'#EDE9FE', color:'#5B21B6' },
+  chill:    { icon:'💧', bg:'#E0F2FE', color:'#075985' },
+  movie:    { icon:'🎬', bg:'#FCE7F3', color:'#9D174D' },
+  sports:   { icon:'📺', bg:'#FEE2E2', color:'#991B1B' },
+};
+
+// ══════════════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════════════
+let voter = null;
+let votes = {};      // { actId: { Jon:null/yes/maybe/no, Dave:..., Max:... } }
+let comments = {};   // { actId: [{id,author,body,created_at}] }
+let ideas = [];
+let logistics = { supply:[], reservation:[], todo:[] };
+let openComments = {};
+
+ACTIVITIES.forEach(a => {
+  votes[a.id] = { Jon:null, Dave:null, Max:null };
+  comments[a.id] = [];
+});
+
+// ══════════════════════════════════════════════════════
+//  SUPABASE LOAD
+// ══════════════════════════════════════════════════════
+async function loadAll(quiet = false) {
+  if (!quiet) showStatus('loading');
+  try {
+    const [vRows, cRows, iRows, lRows] = await Promise.all([
+      api('visit_votes?select=*'),
+      api('visit_comments?select=*&order=created_at.asc'),
+      api('visit_ideas?select=*&order=created_at.asc'),
+      api('visit_logistics?select=*&order=created_at.asc'),
+    ]);
+
+    // Reset
+    ACTIVITIES.forEach(a => { votes[a.id] = { Jon:null, Dave:null, Max:null }; });
+    ACTIVITIES.forEach(a => { comments[a.id] = []; });
+
+    (vRows || []).forEach(r => {
+      if (votes[r.activity_id]) votes[r.activity_id][r.voter] = r.vote;
+    });
+    (cRows || []).forEach(r => {
+      if (comments[r.activity_id]) comments[r.activity_id].push(r);
+    });
+    ideas = iRows || [];
+    logistics = { supply:[], reservation:[], todo:[] };
+    (lRows || []).forEach(r => { if (logistics[r.category]) logistics[r.category].push(r); });
+
+    hideStatus();
+    renderAll();
+    if (quiet) showToast('🔄 Refreshed!');
+  } catch(e) {
+    showStatus('error', '⚠️ Could not load data — check connection and refresh');
+    console.error(e);
+  }
+}
+
+// ══════════════════════════════════════════════════════
+//  VOTER
+// ══════════════════════════════════════════════════════
+function setVoter(name) {
+  voter = name;
+  ['Jon','Dave','Max'].forEach(n => {
+    document.getElementById('vbtn-' + n).className = 'voter-btn' + (n === name ? ' on-' + n : '');
+  });
+  showToast('Voting as ' + name + ' ' + {Jon:'🔴',Dave:'🔵',Max:'🟢'}[name]);
+  renderVote();
+}
+
+// ══════════════════════════════════════════════════════
+//  VOTE
+// ══════════════════════════════════════════════════════
+async function castVote(actId, v) {
+  if (!voter) { showToast('Pick your name first! ☝️'); return; }
+  const current = votes[actId][voter];
+  const next = current === v ? null : v;
+
+  // Optimistic
+  votes[actId][voter] = next;
+  renderVote();
+
+  try {
+    if (next === null) {
+      await api(`visit_votes?activity_id=eq.${actId}&voter=eq.${voter}`, { method:'DELETE', headers:{ Prefer:'' } });
+    } else {
+      await api('visit_votes', {
+        method:'POST',
+        headers:{ Prefer:'resolution=merge-duplicates,return=representation' },
+        body: JSON.stringify({ activity_id:actId, voter, vote:next })
+      });
+    }
+    showToast(next==='yes'?'👍 You\'re in!':next==='maybe'?'🤔 Maybe noted':next==='no'?'👎 Skipping it':'Vote cleared');
+  } catch(e) {
+    showToast('⚠️ Vote didn\'t save — try again');
+    await loadAll(true);
+  }
+}
+
+// ══════════════════════════════════════════════════════
+//  COMMENT
+// ══════════════════════════════════════════════════════
+async function submitComment(actId) {
+  if (!voter) { showToast('Pick your name first! ☝️'); return; }
+  const inp = document.getElementById('cinp-' + actId);
+  const body = (inp?.value || '').trim();
+  if (!body) return;
+
+  const temp = { id:'tmp'+Date.now(), activity_id:actId, author:voter, body, created_at:new Date().toISOString() };
+  comments[actId].push(temp);
+  inp.value = '';
+  renderCommentList(actId);
+
+  try {
+    await api('visit_comments', { method:'POST', body: JSON.stringify({ activity_id:actId, author:voter, body }) });
+    showToast('💬 Comment saved!');
+  } catch(e) {
+    showToast('⚠️ Comment didn\'t save — try again');
+    comments[actId] = comments[actId].filter(c => c.id !== temp.id);
+    renderCommentList(actId);
+  }
+}
+
+// ══════════════════════════════════════════════════════
+//  IDEA
+// ══════════════════════════════════════════════════════
+async function submitIdea() {
+  const who   = document.getElementById('idea-who').value;
+  const name  = document.getElementById('idea-name').value.trim();
+  const type  = document.getElementById('idea-type').value;
+  const day   = document.getElementById('idea-day').value.trim();
+  const notes = document.getElementById('idea-notes').value.trim();
+  if (!who || !name) { showToast('Need your name and idea!'); return; }
+  try {
+    const rows = await api('visit_ideas', {
+      method:'POST',
+      body: JSON.stringify({ submitted_by:who, name, type, day_time:day, notes })
+    });
+    if (rows) ideas.push(...rows);
+    document.getElementById('idea-who').value = '';
+    document.getElementById('idea-name').value = '';
+    document.getElementById('idea-day').value = '';
+    document.getElementById('idea-notes').value = '';
+    renderIdeas();
+    showToast('💡 Idea added!');
+  } catch(e) { showToast('⚠️ Didn\'t save — try again'); }
+}
+
+// ══════════════════════════════════════════════════════
+//  LOGISTICS
+// ══════════════════════════════════════════════════════
+async function addLogItem(cat) {
+  const inp = document.getElementById('inp-' + cat);
+  const text = (inp?.value || '').trim();
+  if (!text) return;
+  try {
+    const rows = await api('visit_logistics', {
+      method:'POST',
+      body: JSON.stringify({ category:cat, text, assigned_to: voter || '' })
+    });
+    if (rows) logistics[cat].push(...rows);
+    inp.value = '';
+    renderLogSection(cat);
+    showToast('Added!');
+  } catch(e) { showToast('⚠️ Didn\'t save — try again'); }
+}
+
+async function toggleDone(cat, id, current) {
+  logistics[cat] = logistics[cat].map(i => i.id === id ? {...i, done:!current} : i);
+  renderLogSection(cat);
+  try {
+    await api(`visit_logistics?id=eq.${id}`, {
+      method:'PATCH',
+      headers:{ Prefer:'return=minimal' },
+      body: JSON.stringify({ done:!current })
+    });
+  } catch(e) {
+    logistics[cat] = logistics[cat].map(i => i.id === id ? {...i, done:current} : i);
+    renderLogSection(cat);
+    showToast('⚠️ Update failed');
+  }
+}
+
+// ══════════════════════════════════════════════════════
+//  RENDER
+// ══════════════════════════════════════════════════════
+function renderAll() {
+  renderVote();
+  renderAgenda();
+  renderIdeas();
+  renderLogistics();
+}
+
+// ── Vote panel ────────────────────────────────────────
+function renderVote() {
+  const el = document.getElementById('vote-days');
+  el.innerHTML = DAYS.map(day => {
+    const acts = ACTIVITIES.filter(a => a.day === day.key);
+    return `
+      <div class="day-block">
+        <div class="day-hdr" style="background:${day.color}">
+          <div class="day-label">${day.label}</div>
+          <div class="day-sub">${day.sub}</div>
+          ${day.note ? `<div class="day-note">⚠️ ${day.note}</div>` : ''}
+        </div>
+        <div class="day-list" style="border-color:${day.color}">
+          ${acts.map((act, i) => renderCard(act, i < acts.length - 1)).join('')}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function renderCard(act, notLast) {
+  const tm = TYPE_META[act.type] || TYPE_META.activity;
+  const av = votes[act.id] || {};
+  const myVote = voter ? av[voter] : null;
+  const ac = comments[act.id] || [];
+  const isOpen = openComments[act.id];
+
+  const voteHTML = ['yes','maybe','no'].map(v => {
+    const cnt = Object.values(av).filter(x => x === v).length;
+    const sel = myVote === v;
+    const e = v==='yes'?'👍':v==='maybe'?'🤔':'👎';
+    const l = v==='yes'?'In':v==='maybe'?'Maybe':'Skip';
+    return `<button class="vote-btn${sel?' '+v+'-on':''}" onclick="castVote('${act.id}','${v}')">
+      <span class="ve">${e}</span><span class="vc">${l} (${cnt})</span>
+    </button>`;
+  }).join('');
+
+  const vtags = ['yes','maybe','no'].flatMap(v =>
+    Object.entries(av).filter(([,val]) => val === v).map(([n]) =>
+      `<span class="vtag vtag-${v}">${n} ${v==='yes'?'✓':v==='maybe'?'~':'✗'}</span>`
+    )
+  ).join('');
+
+  const commentsHTML = ac.map(c =>
+    `<div class="comment-item"><div class="comment-author">${c.author}</div><div class="comment-body">${escHtml(c.body)}</div></div>`
+  ).join('');
+
+  return `
+    <div class="act-card" style="${notLast?'':'border-bottom:none'}">
+      <div class="act-name">${tm.icon} ${act.name}</div>
+      <div class="act-meta">
+        <span class="type-tag" style="background:${tm.bg};color:${tm.color}">${act.type}</span>
+        <span>🕐 ${act.time}</span>
+      </div>
+      ${act.note ? `<div class="act-note">${act.note}</div>` : ''}
+      <div class="vote-row">${voteHTML}</div>
+      <div class="vtags">${vtags}</div>
+      <div class="comments-toggle" onclick="toggleComments('${act.id}')">
+        💬 ${ac.length > 0 ? ac.length + ' comment' + (ac.length>1?'s':'') : 'Add comment'}
+        <span>${isOpen?'▲':'▼'}</span>
+      </div>
+      <div class="comments-area${isOpen?' open':''}" id="carea-${act.id}">
+        <div id="clist-${act.id}">${commentsHTML}</div>
+        <div class="comment-input-row">
+          <input class="comment-input" id="cinp-${act.id}"
+            placeholder="${voter?'Say something, '+voter+'...':'Pick your name above first'}"
+            ${!voter?'disabled':''}
+            onkeydown="if(event.key==='Enter')submitComment('${act.id}')">
+          <button class="comment-submit" onclick="submitComment('${act.id}')">→</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderCommentList(actId) {
+  const el = document.getElementById('clist-' + actId);
+  if (!el) return;
+  el.innerHTML = (comments[actId] || []).map(c =>
+    `<div class="comment-item"><div class="comment-author">${c.author}</div><div class="comment-body">${escHtml(c.body)}</div></div>`
+  ).join('');
+}
+
+function toggleComments(actId) {
+  openComments[actId] = !openComments[actId];
+  const el = document.getElementById('carea-' + actId);
+  if (el) el.classList.toggle('open', openComments[actId]);
+}
+
+// ── Agenda ────────────────────────────────────────────
+const AGENDA = [
+  { day:DAYS[0], slots:[
+    { time:'Noon',      event:'✈️ Dave arrives!',              note:'Welcome to South Florida!', locked:true },
+    { time:'Afternoon', event:'Pool + Travelers Championship', note:'Max hosts while Jon finishes work', locked:false },
+    { time:'~4pm',      event:'🎉 Jon is free!',               note:'Full crew assembled', locked:true },
+    { time:'Evening',   event:'Osprey Point Sunset Golf',      note:'Check group vote above', locked:false },
+    { time:'Night',     event:'World Cup Watch Party',         note:'Check match schedule', locked:false },
+  ]},
+  { day:DAYS[1], slots:[
+    { time:'Morning',   event:'Slow start / coffee',           note:'Jon & Max work in AM', locked:false },
+    { time:'Afternoon', event:'Disclosure Day + Pool',         note:'Dave & Max; Jon may join later', locked:false },
+    { time:'~4pm',      event:'🎉 Jon is free!',               note:'Full crew back together', locked:true },
+    { time:'Evening',   event:'Boynton Links Golf',            note:'Casual evening round', locked:false },
+    { time:'Night',     event:'Hawkers Dinner + PopStroke?',   note:'Dinner with Tara, mini golf TBD', locked:false },
+  ]},
+  { day:DAYS[2], slots:[
+    { time:'Morning',   event:'Everyone sleeps in',            note:'Big day ahead', locked:false },
+    { time:'Afternoon', event:'Austin Republic BBQ',           note:'Pre-golf fuel up', locked:false },
+    { time:'Afternoon', event:'PBS Virtual Experience',        note:'Napoleon or Coliseum — vote!', locked:false },
+    { time:'Evening',   event:'⛳ Palm Beach Par 3',           note:'The marquee round', locked:false },
+    { time:'Night',     event:'PopStroke / World Cup',         note:'Cap off the big day', locked:false },
+  ]},
+  { day:DAYS[3], slots:[
+    { time:'Morning',   event:'Low-key brunch?',               note:'Final hangout time', locked:false },
+    { time:'Afternoon', event:'✈️ Dave departs',              note:'Safe travels!', locked:true },
+  ]},
+];
+
+function renderAgenda() {
+  document.getElementById('agenda-content').innerHTML = AGENDA.map(({ day, slots }) => `
+    <div class="day-block">
+      <div class="day-hdr" style="background:${day.color}">
+        <div class="day-label">${day.label}</div>
+        <div class="day-sub">${day.sub}</div>
+      </div>
+      <div style="background:#fff;border:2px solid ${day.color};border-top:none;border-radius:0 0 14px 14px;padding:16px">
+        ${slots.map((s, i) => `
+          <div class="ag-slot">
+            <div class="ag-time">${s.time}</div>
+            <div class="ag-dot-col">
+              <div class="ag-dot" style="background:${s.locked?'#16A34A':'#D97706'}"></div>
+              ${i < slots.length-1 ? '<div class="ag-line"></div>' : ''}
+            </div>
+            <div class="ag-content${s.locked?' locked':''}">
+              <div class="ag-event">${s.event}
+                <span class="status-pill ${s.locked?'pill-locked':'pill-tbd'}">${s.locked?'Locked':'TBD'}</span>
+              </div>
+              <div class="ag-note">${s.note}</div>
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+// ── Ideas ─────────────────────────────────────────────
+const IDEA_ICONS = { activity:'🎯', food:'🍽️', supply:'🛒', other:'💬' };
+function renderIdeas() {
+  const el = document.getElementById('ideas-list');
+  if (!ideas.length) {
+    el.innerHTML = `<div class="empty"><div class="empty-icon">🤔</div><div class="empty-text">No ideas yet — be the first!</div></div>`;
+    return;
+  }
+  el.innerHTML = ideas.map(idea => `
+    <div class="idea-item">
+      <div class="idea-top">
+        <div class="idea-name">${IDEA_ICONS[idea.type]||'✦'} ${escHtml(idea.name)}</div>
+        <span class="idea-by">by ${escHtml(idea.submitted_by)}</span>
+      </div>
+      ${idea.day_time ? `<div class="idea-day">🕐 ${escHtml(idea.day_time)}</div>` : ''}
+      ${idea.notes ? `<div class="idea-notes">${escHtml(idea.notes)}</div>` : ''}
+    </div>`).join('');
+}
+
+// ── Logistics ─────────────────────────────────────────
+function renderLogistics() {
+  ['supply','reservation','todo'].forEach(renderLogSection);
+}
+function renderLogSection(cat) {
+  const el = document.getElementById('log-' + cat);
+  const items = logistics[cat];
+  if (!items.length) {
+    el.innerHTML = `<div class="empty" style="padding:12px 0"><div class="empty-text">Nothing here yet.</div></div>`;
+    return;
+  }
+  el.innerHTML = items.map(item => `
+    <div class="log-item${item.done?' done-item':''}">
+      <div class="log-item-text">
+        <div class="log-item-name${item.done?' struck':''}">${item.done?'✅ ':''}${escHtml(item.text)}</div>
+        ${item.assigned_to ? `<div class="log-item-who">→ ${escHtml(item.assigned_to)}</div>` : ''}
+      </div>
+      <button class="done-btn ${item.done?'done':'pending'}" onclick="toggleDone('${cat}','${item.id}',${item.done})">
+        ${item.done?'Done!':'Mark Done'}
+      </button>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════════════════════
+//  TABS
+// ══════════════════════════════════════════════════════
+function switchTab(id, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+  document.getElementById('panel-' + id).classList.add('on');
+  el.classList.add('on');
+}
+
+// ══════════════════════════════════════════════════════
+//  STATUS + TOAST + UTILS
+// ══════════════════════════════════════════════════════
+function showStatus(type, msg) {
+  const el = document.getElementById('statusBar');
+  if (type === 'loading') {
+    el.textContent = '⏳ Loading...';
+    el.className = 'status-saving';
+  } else if (type === 'error') {
+    el.textContent = msg || '⚠️ Error';
+    el.className = 'status-error';
+  }
+}
+function hideStatus() {
+  const el = document.getElementById('statusBar');
+  el.className = '';
+  el.textContent = '';
+}
+
+let toastTimer;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2400);
+}
+
+function escHtml(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ══════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════
+loadAll();
+renderAgenda();
+</script>
+</body>
+</html>
