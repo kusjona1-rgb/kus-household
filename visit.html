@@ -468,19 +468,21 @@ async function castVote(actId, v) {
   renderVote();
 
   try {
-    if (next === null) {
-      // Remove vote
-      await api(`visit_votes?activity_id=eq.${actId}&voter=eq.${voter}`, {
-        method: 'DELETE',
-        headers: { Prefer: 'return=minimal' }
-      });
-    } else {
-      // Upsert — works cleanly now that unique(activity_id, voter) constraint exists
-      await api('visit_votes?on_conflict=activity_id,voter', {
+    // Step 1: always delete any existing vote for this person+activity
+    const delRes = await fetch(`${SB_URL}/visit_votes?activity_id=eq.${actId}&voter=eq.${voter}`, {
+      method: 'DELETE',
+      headers: { ...HEADERS, 'Prefer': 'return=minimal' }
+    });
+    if (!delRes.ok && delRes.status !== 404) throw new Error('Delete failed: ' + delRes.status);
+
+    // Step 2: insert new vote if not clearing
+    if (next !== null) {
+      const insRes = await fetch(`${SB_URL}/visit_votes`, {
         method: 'POST',
-        headers: { Prefer: 'resolution=merge-duplicates,return=minimal' },
-        body: JSON.stringify({ activity_id: actId, voter, vote: next })
+        headers: { ...HEADERS, 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ activity_id: actId, voter: voter, vote: next })
       });
+      if (!insRes.ok) throw new Error('Insert failed: ' + await insRes.text());
     }
     showToast(next==='yes'?'👍 You\'re in!':next==='maybe'?'🤔 Maybe noted':next==='no'?'👎 Skipping it':'Vote cleared');
   } catch(e) {
