@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kus Household — Tools & Guides</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #FAFAF9;
+  color: #1C1917;
+  min-height: 100vh;
+  max-width: 480px;
+  margin: 0 auto;
+  padding-bottom: 40px;
+}
+
+.hdr {
+  background: linear-gradient(135deg, #1C1917 0%, #44403C 60%, #C2410C 100%);
+  color: white;
+  padding: 30px 20px 24px;
+  text-align: center;
+}
+.hdr-eye { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; opacity: .7; margin-bottom: 6px; }
+.hdr-title { font-size: 28px; font-weight: 800; margin-bottom: 6px; }
+.hdr-sub { font-size: 13px; opacity: .8; }
+
+.body { padding: 20px 16px; }
+
+.section-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+  color: #78716C; margin: 24px 0 10px; display: flex; align-items: center; gap: 8px;
+}
+.section-label::after { content: ''; flex: 1; height: 1px; background: #E7E5E4; }
+
+.tool-card {
+  background: white; border: 1.5px solid #E7E5E4; border-radius: 14px;
+  padding: 16px; margin-bottom: 12px; text-decoration: none; color: inherit;
+  display: block; transition: border-color .15s, box-shadow .15s;
+}
+.tool-card:active { border-color: #C2410C; box-shadow: 0 2px 12px rgba(194,65,12,.12); }
+.tool-top { display: flex; align-items: flex-start; gap: 12px; }
+.tool-icon { font-size: 28px; flex-shrink: 0; }
+.tool-info { flex: 1; }
+.tool-name { font-size: 16px; font-weight: 800; margin-bottom: 3px; }
+.tool-desc { font-size: 13px; color: #78716C; line-height: 1.45; }
+.tool-meta { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+.tool-tag {
+  font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 8px;
+}
+.tag-active { background: #DCFCE7; color: #166534; }
+.tag-family { background: #E0F2FE; color: #075985; }
+.tag-trip { background: #FEF3C7; color: #92400E; }
+.tag-shared { background: #EDE9FE; color: #5B21B6; }
+.tool-arrow { font-size: 18px; color: #D6D3D1; align-self: center; }
+
+.home-link {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  margin: 28px 0 0; font-size: 13px; font-weight: 700; color: #78716C;
+  text-decoration: none;
+}
+.home-link:hover { color: #C2410C; }
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-eye">kushousehold.com</div>
+  <div class="hdr-title">Tools & Guides 🧰</div>
+  <div class="hdr-sub">Shared planners, trip guides, and family tools</div>
+</div>
+
+<div class="body">
+
+  <div class="section-label">Active Now</div>
+
+  <a class="tool-card" href="/visit.html">
+    <div class="tool-top">
+      <span class="tool-icon">🏌️</span>
+      <div class="tool-info">
+        <div class="tool-name">Dave's Visit</div>
+        <div class="tool-desc">Trip planner for Dave, Jon & Max — June 25–28. Vote on activities, add comments, track to-dos and reservations.</div>
+        <div class="tool-meta">
+          <span class="tool-tag tag-active">🟢 Active</span>
+          <span class="tool-tag tag-shared">Shared</span>
+          <span class="tool-tag tag-trip">Trip</span>
+        </div>
+      </div>
+      <span class="tool-arrow">›</span>
+    </div>
+  </a>
+
+  <a class="tool-card" href="/knoxville.html">
+    <div class="tool-top">
+      <span class="tool-icon">🏅</span>
+      <div class="tool-info">
+        <div class="tool-name">Knoxville Weekend</div>
+        <div class="tool-desc">Family guide for Nadia's AAU Nationals — June 20–22. Itinerary, directions, food, and things to explore.</div>
+        <div class="tool-meta">
+          <span class="tool-tag tag-active">🟢 Active</span>
+          <span class="tool-tag tag-family">Family</span>
+          <span class="tool-tag tag-trip">Trip</span>
+        </div>
+      </div>
+      <span class="tool-arrow">›</span>
+    </div>
+  </a>
+
+  <div class="section-label">Family Site</div>
+
+  <a class="tool-card" href="/">
+    <div class="tool-top">
+      <span class="tool-icon">🏠</span>
+      <div class="tool-info">
+        <div class="tool-name">Kus Household Home</div>
+        <div class="tool-desc">The main family site — Nadia & Jani's pages, summer checklist, Buster, and more.</div>
+        <div class="tool-meta">
+          <span class="tool-tag tag-family">Family</span>
+        </div>
+      </div>
+      <span class="tool-arrow">›</span>
+    </div>
+  </a>
+
+</div>
+
+</body>
+</html>
