@@ -469,18 +469,25 @@ async function castVote(actId, v) {
 
   try {
     if (next === null) {
-      await api(`visit_votes?activity_id=eq.${actId}&voter=eq.${voter}`, { method:'DELETE', headers:{ Prefer:'' } });
+      // Remove vote
+      await api(`visit_votes?activity_id=eq.${actId}&voter=eq.${voter}`, {
+        method: 'DELETE',
+        headers: { Prefer: 'return=minimal' }
+      });
     } else {
-      await api('visit_votes', {
-        method:'POST',
-        headers:{ Prefer:'resolution=merge-duplicates,return=representation' },
-        body: JSON.stringify({ activity_id:actId, voter, vote:next })
+      // Upsert — works cleanly now that unique(activity_id, voter) constraint exists
+      await api('visit_votes?on_conflict=activity_id,voter', {
+        method: 'POST',
+        headers: { Prefer: 'resolution=merge-duplicates,return=minimal' },
+        body: JSON.stringify({ activity_id: actId, voter, vote: next })
       });
     }
     showToast(next==='yes'?'👍 You\'re in!':next==='maybe'?'🤔 Maybe noted':next==='no'?'👎 Skipping it':'Vote cleared');
   } catch(e) {
+    console.error('Vote error:', e);
     showToast('⚠️ Vote didn\'t save — try again');
-    await loadAll(true);
+    votes[actId][voter] = current;
+    renderVote();
   }
 }
 
