@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Knoxville Weekend • June 20–22</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+:root {
+  --orange: #C2410C;
+  --gold: #D97706;
+  --green: #166534;
+  --teal: #0F766E;
+  --ink: #1C1917;
+  --gray: #78716C;
+  --border: #E7E5E4;
+  --light: #F5F5F4;
+  --cream: #FAFAF9;
+  --white: #FFFFFF;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  min-height: 100vh;
+  padding-bottom: 60px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+/* ── HEADER ── */
+.hdr {
+  background: linear-gradient(160deg, #1C1917 0%, #292524 50%, #C2410C 100%);
+  color: white;
+  padding: 28px 20px 22px;
+  text-align: center;
+}
+.hdr-eye {
+  font-size: 11px; font-weight: 700; letter-spacing: 2.5px;
+  text-transform: uppercase; opacity: .7; margin-bottom: 6px;
+}
+.hdr-title {
+  font-size: 30px; font-weight: 800; line-height: 1.1; margin-bottom: 6px;
+}
+.hdr-sub { font-size: 14px; opacity: .85; margin-bottom: 14px; }
+.hdr-chips { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+.hdr-chip {
+  background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25);
+  color: white; border-radius: 20px; padding: 4px 13px; font-size: 12px; font-weight: 600;
+}
+
+/* ── NAV ── */
+.nav {
+  display: flex; overflow-x: auto; background: white;
+  border-bottom: 2px solid var(--border); position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,.07); scrollbar-width: none;
+}
+.nav::-webkit-scrollbar { display: none; }
+.nav-btn {
+  flex-shrink: 0; padding: 12px 14px; font-size: 11px; font-weight: 700;
+  color: var(--gray); cursor: pointer; border-bottom: 3px solid transparent;
+  white-space: nowrap; user-select: none; letter-spacing: .3px;
+}
+.nav-btn.on { color: var(--orange); border-bottom-color: var(--orange); }
+.nav-icon { font-size: 16px; display: block; margin-bottom: 2px; text-align: center; }
+
+/* ── PANELS ── */
+.panel { display: none; padding: 16px; }
+.panel.on { display: block; }
+
+/* ── WHO SELECTOR ── */
+.who-bar {
+  background: white; border: 1.5px solid var(--border); border-radius: 14px;
+  padding: 12px 14px; margin-bottom: 16px;
+}
+.who-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--gray); margin-bottom: 8px; }
+.who-row { display: flex; gap: 7px; flex-wrap: wrap; }
+.who-btn {
+  padding: 6px 14px; border: 2px solid var(--border); border-radius: 20px;
+  background: white; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit;
+  transition: all .15s;
+}
+.who-btn.on { border-color: var(--orange); background: var(--orange); color: white; }
+
+/* ── SECTION CARD ── */
+.sec-card {
+  background: white; border-radius: 14px; border: 1.5px solid var(--border);
+  overflow: hidden; margin-bottom: 16px;
+}
+.sec-head {
+  padding: 14px 16px; display: flex; align-items: center; gap: 10px;
+  cursor: pointer; user-select: none;
+}
+.sec-icon { font-size: 22px; flex-shrink: 0; }
+.sec-title-block { flex: 1; }
+.sec-title { font-size: 16px; font-weight: 800; line-height: 1.2; }
+.sec-sub { font-size: 12px; color: var(--gray); margin-top: 2px; }
+.sec-chevron { font-size: 14px; color: var(--gray); flex-shrink: 0; transition: transform .2s; }
+.sec-chevron.open { transform: rotate(180deg); }
+.sec-body { display: none; border-top: 1px solid var(--border); }
+.sec-body.open { display: block; }
+.sec-content { padding: 14px 16px; }
+
+/* ── CONTENT STYLES ── */
+.place-card {
+  background: var(--light); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px;
+}
+.place-card:last-child { margin-bottom: 0; }
+.place-name { font-weight: 700; font-size: 15px; margin-bottom: 3px; }
+.place-meta { font-size: 12px; color: var(--gray); margin-bottom: 5px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.place-desc { font-size: 13px; line-height: 1.5; color: #44403C; }
+.tag { display: inline-block; padding: 2px 8px; border-radius: 8px; font-size: 11px; font-weight: 700; }
+.tag-walk { background: #DCFCE7; color: #166534; }
+.tag-drive { background: #E0F2FE; color: #075985; }
+.tag-dog { background: #FEF3C7; color: #92400E; }
+.tag-kid { background: #EDE9FE; color: #5B21B6; }
+.tag-food { background: #FCE7F3; color: #9D174D; }
+
+.map-btn {
+  display: inline-flex; align-items: center; gap: 5px; margin-top: 8px;
+  background: var(--orange); color: white; text-decoration: none;
+  border-radius: 8px; padding: 6px 12px; font-size: 12px; font-weight: 700;
+}
+
+.info-row { display: flex; gap: 8px; align-items: flex-start; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+.info-row:last-child { border-bottom: none; }
+.info-row-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.info-row-text { flex: 1; line-height: 1.5; }
+.info-row-label { font-weight: 700; font-size: 12px; color: var(--gray); display: block; margin-bottom: 2px; text-transform: uppercase; letter-spacing: .5px; }
+
+.day-slot { display: flex; gap: 10px; margin-bottom: 10px; }
+.day-time { font-size: 11px; font-weight: 700; color: var(--gray); min-width: 48px; text-align: right; padding-top: 3px; }
+.day-dot-col { display: flex; flex-direction: column; align-items: center; }
+.day-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--orange); margin-top: 3px; flex-shrink: 0; }
+.day-line { width: 2px; background: var(--border); flex: 1; min-height: 14px; }
+.day-content { flex: 1; background: var(--light); border-radius: 10px; padding: 9px 12px; margin-bottom: 2px; }
+.day-event { font-weight: 700; font-size: 14px; }
+.day-note { font-size: 12px; color: var(--gray); margin-top: 2px; line-height: 1.4; }
+
+/* ── REACTION BAR ── */
+.reaction-bar {
+  border-top: 1px solid var(--border);
+  padding: 10px 14px;
+  background: var(--cream);
+}
+.reaction-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.thumb-btn {
+  display: flex; align-items: center; gap: 5px;
+  background: white; border: 1.5px solid var(--border); border-radius: 20px;
+  padding: 5px 12px; font-size: 13px; font-weight: 700; cursor: pointer;
+  font-family: inherit; transition: all .15s;
+}
+.thumb-btn.on { background: #FEF3C7; border-color: var(--gold); color: var(--gold); }
+.thumb-count { font-size: 13px; font-weight: 700; }
+.comments-toggle {
+  font-size: 12px; color: var(--teal); font-weight: 700; cursor: pointer;
+  display: flex; align-items: center; gap: 4px; margin-left: auto;
+}
+.comments-area { display: none; }
+.comments-area.open { display: block; }
+.comment-item {
+  background: white; border-radius: 8px; padding: 8px 10px; margin-bottom: 6px;
+  border: 1px solid var(--border);
+}
+.comment-author { font-weight: 700; font-size: 11px; color: var(--teal); margin-bottom: 2px; }
+.comment-body { font-size: 13px; line-height: 1.4; }
+.comment-input-row { display: flex; gap: 6px; margin-top: 8px; }
+.comment-input {
+  flex: 1; border: 1.5px solid var(--border); border-radius: 8px;
+  padding: 8px 10px; font-size: 13px; font-family: inherit; background: white;
+}
+.comment-input:focus { outline: none; border-color: var(--teal); }
+.comment-submit {
+  background: var(--teal); color: white; border: none; border-radius: 8px;
+  padding: 8px 14px; font-size: 14px; font-weight: 700; cursor: pointer;
+}
+.thumbs-list { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 4px; }
+.thumb-name { font-size: 11px; background: #FEF3C7; color: #92400E; border-radius: 6px; padding: 2px 7px; font-weight: 600; }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+  background: var(--ink); color: white; padding: 10px 20px; border-radius: 99px;
+  font-size: 13px; font-weight: 700; z-index: 9999; white-space: nowrap;
+  box-shadow: 0 4px 20px rgba(0,0,0,.3); transition: transform .25s; pointer-events: none;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+.divider { height: 1px; background: var(--border); margin: 12px 0; }
+.section-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--gray); margin: 14px 0 8px; }
+.highlight-box { background: #FEF3C7; border-left: 3px solid var(--gold); border-radius: 8px; padding: 10px 12px; margin-bottom: 12px; font-size: 13px; line-height: 1.5; }
+.highlight-box strong { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; color: var(--gold); margin-bottom: 3px; }
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-eye">June 20–22, 2025 · Knoxville, TN</div>
+  <div class="hdr-title">Kus Family Weekend 🏅</div>
+  <div class="hdr-sub">Nadia's AAU Nationals · The whole crew together</div>
+  <div class="hdr-chips">
+    <span class="hdr-chip">🏠 South Knoxville Airbnb</span>
+    <span class="hdr-chip">🤸 Convention Center Sunday</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="nav-btn on" onclick="switchTab('itinerary',this)"><span class="nav-icon">📅</span>SCHEDULE</div>
+  <div class="nav-btn" onclick="switchTab('directions',this)"><span class="nav-icon">🗺️</span>DIRECTIONS</div>
+  <div class="nav-btn" onclick="switchTab('eat',this)"><span class="nav-icon">🍽️</span>EAT</div>
+  <div class="nav-btn" onclick="switchTab('explore',this)"><span class="nav-icon">🌿</span>EXPLORE</div>
+  <div class="nav-btn" onclick="switchTab('meet',this)"><span class="nav-icon">🏅</span>MEET DAY</div>
+</div>
+
+<!-- ═══════ ITINERARY ═══════ -->
+<div class="panel on" id="panel-itinerary">
+
+  <div class="who-bar">
+    <div class="who-label">Who are you?</div>
+    <div class="who-row">
+      <button class="who-btn" onclick="setWho('Jon')">Jon</button>
+      <button class="who-btn" onclick="setWho('Nadia')">Nadia</button>
+      <button class="who-btn" onclick="setWho('Jani')">Jani</button>
+      <button class="who-btn" onclick="setWho('Grandma')">Grandma</button>
+      <button class="who-btn" onclick="setWho('Grandpa')">Grandpa</button>
+    </div>
+  </div>
+
+  <!-- FRIDAY -->
+  <div class="sec-card">
+    <div class="sec-head" onclick="toggleSec('fri')">
+      <span class="sec-icon">🚗</span>
+      <div class="sec-title-block">
+        <div class="sec-title">Friday, June 20</div>
+        <div class="sec-sub">Travel day · Arrive & settle in</div>
+      </div>
+      <span class="sec-chevron on" id="chev-fri">▼</span>
+    </div>
+    <div class="sec-body open" id="body-fri">
+      <div class="sec-content">
+        <div class="day-slot">
+          <div class="day-time">Morning</div>
+          <div class="day-dot-col"><div class="day-dot"></div><div class="day-line"></div></div>
+          <div class="day-content"><div class="day-event">🚗 Jon + girls + Buster depart Florida</div><div class="day-note">~11 hour drive — aim for early start</div></div>
+        </div>
+        <div class="day-slot">
+          <div class="day-time">Midday</div>
+          <div class="day-dot-col"><div class="day-dot"></div><div class="day-line"></div></div>
+          <div class="day-content"><div class="day-event">👴👵 Grandma & Grandpa depart Michigan</div><div class="day-note">~8 hour drive from St. Johns, MI</div></div>
+        </div>
+        <div class="day-slot">
+          <div class="day-time">Evening</div>
+          <div class="day-dot-col"><div class="day-dot"></div><div class="day-line"></div></div>
+          <div class="day-content"><div class="day-event">🏠 Everyone arrives at the Airbnb</div><div class="day-note">3639 Lancaster Drive, South Knoxville</div></div>
+        </div>
+        <div class="day-slot">
+          <div class="day-time">Night</div>
+          <div class="day-dot-col"><div class="day-dot"></div></div>
+          <div class="day-content"><div class="day-event">🍕 Casual dinner nearby</div><div class="day-note">SoKno Taco or Round Up Restaurant — both walkable</div></div>
+        </div>
+      </div>
+      <div id="reactions-fri"></div>
+    </div>
+  </div>
+
+  <!-- SATURDAY -->
+  <div class="sec-card">
+    <div class="sec-head" onclick="toggleSec('sat')">
+      <span class="sec-icon">🌿</span>
+      <div class="sec-title-block">
+        <div class="sec-title">Saturday, June 21</div>
+        <div class="sec-sub">Explore day · Pick your adventure</div>
+      </div>
+      <span class="sec-chevron" id="chev-sat">▼</span>
+    </div>
+    <div class="sec-body" id="body-sat">
+      <div class="sec-content">
+        <div class="highlight-box"><strong>Big decision</strong>Stay local in South Knoxville (Urban Wilderness, quarry swimming, Ijams) OR head to Gatlinburg/Smokies for the full mountain experience. Both are great — see the Explore tab for details on each.</div>
+        <div class="day-slot">
+          <div class="day-time">Morning</div>
+          <div class="day-dot-col"><div class="day-dot"></div><div class="day-line"></div></div>
+          <div class="day-content"><div class="day-event">☕ Slow start, coffee, explore the neighborhood</div><div class="day-note">Baker Creek Preserve trail is right out the door</div></div>
+        </div>
+        <div class="day-slot">
+          <div class="day-time">Midday</div>
+          <div class="day-dot-col"><div class="day-dot"></div><div class="day-line"></div></div>
+          <div class="day-content"><div class="day-event">🏞️ Main adventure (local or Smokies)</div><div class="day-note">See Explore tab for options</div></div>
+        </div>
+        <div class="day-slot">
+          <div class="day-time">Evening</div>
+          <div class="day-dot-col"><div class="day-dot"></div><div class="day-line"></div></div>
+          <div class="day-content"><div class="day-event">🍽️ Dinner on Sevier Ave or Market Square</div><div class="day-note">Early night — big day tomorrow!</div></div>
+        </div>
+        <div class="day-slot">
+          <div class="day-time">Night</div>
+          <div class="day-dot-col"><div class="day-dot"></div></div>
+          <div class="day-content"><div class="day-event">🏠 Early to bed — Nadia competes tomorrow</div><div class="day-note">Meet starts at 11:20am. Leave by 10:30am.</div></div>
+        </div>
+      </div>
+      <div id="reactions-sat"></div>
+    </div>
+  </div>
+
+  <!-- SUNDAY -->
+  <div class="sec-card">
+    <div class="sec-head" onclick="toggleSec('sun')">
+      <span class="sec-icon">🏅</span>
+      <div class="sec-title-block">
+        <div class="sec-title">Sunday, June 22</div>
+        <div class="sec-sub">MEET DAY · Nadia competes at 11:20am</div>
+      </div>
+      <span class="sec-chevron" id="chev-sun">▼</span>
+    </div>
+    <div class="sec-body" id="body-sun">
+      <div class="sec-content">
+        <div class="highlight-box"><strong>🏅 Meet info</strong>Knoxville Convention Center · 701 Henley St · Session starts 11:20am · Arrive by 10:45am for parking</div>
+        <div class="day-slot">
+          <div class="day-time">Morning</div>
+          <div class="day-dot-col"><div class="day-dot"></div><div class="day-line"></div></div>
+          <div class="day-content"><div class="day-event">🥞 Quick breakfast, get ready</div><div class="day-note">Something easy at the Airbnb or grab-and-go</div></div>
+        </div>
+        <div class="day-slot">
+          <div class="day-time">10:30am</div>
+          <div class="day-dot-col"><div class="day-dot"></div><div class="day-line"></div></div>
+          <div class="day-content"><div class="day-event">🚗 Depart for Convention Center</div><div class="day-note">~15 min drive. Park in State Street Garage (closest)</div></div>
+        </div>
+        <div class="day-slot">
+          <div class="day-time">11:20am</div>
+          <div class="day-dot-col"><div class="day-dot" style="background:#D97706"></div><div class="day-line"></div></div>
+          <div class="day-content"><div class="day-event">🤸 Nadia competes! 🎉</div><div class="day-note">Knoxville Convention Center, Main Hall</div></div>
+        </div>
+        <div class="day-slot">
+          <div class="day-time">Afternoon</div>
+          <div class="day-dot-col"><div class="day-dot"></div><div class="day-line"></div></div>
+          <div class="day-content"><div class="day-event">🍔 Celebratory lunch downtown</div><div class="day-note">Market Square is steps away — tons of options</div></div>
+        </div>
+        <div class="day-slot">
+          <div class="day-time">Late PM</div>
+          <div class="day-dot-col"><div class="day-dot"></div></div>
+          <div class="day-content"><div class="day-event">🚗 Head home</div><div class="day-note">Grandma & Grandpa head north · Jon + girls head south</div></div>
+        </div>
+      </div>
+      <div id="reactions-sun"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ DIRECTIONS ═══════ -->
+<div class="panel" id="panel-directions">
+
+  <div class="who-bar">
+    <div class="who-label">Who are you?</div>
+    <div class="who-row">
+      <button class="who-btn" onclick="setWho('Jon')">Jon</button>
+      <button class="who-btn" onclick="setWho('Nadia')">Nadia</button>
+      <button class="who-btn" onclick="setWho('Jani')">Jani</button>
+      <button class="who-btn" onclick="setWho('Grandma')">Grandma</button>
+      <button class="who-btn" onclick="setWho('Grandpa')">Grandpa</button>
+    </div>
+  </div>
+
+  <div class="sec-card">
+    <div class="sec-head" onclick="toggleSec('dir-gp')">
+      <span class="sec-icon">👴</span>
+      <div class="sec-title-block">
+        <div class="sec-title">Grandma & Grandpa → Airbnb</div>
+        <div class="sec-sub">St. Johns, MI to South Knoxville · ~8 hrs</div>
+      </div>
+      <span class="sec-chevron" id="chev-dir-gp">▼</span>
+    </div>
+    <div class="sec-body" id="body-dir-gp">
+      <div class="sec-content">
+        <div class="info-row">
+          <span class="info-row-icon">📍</span>
+          <div class="info-row-text"><span class="info-row-label">From</span>1612 S. Krepps Rd, St. Johns, MI 48879</div>
+        </div>
+        <div class="info-row">
+          <span class="info-row-icon">🏠</span>
+          <div class="info-row-text"><span class="info-row-label">To</span>3639 Lancaster Drive, Knoxville, TN 37920</div>
+        </div>
+        <div class="info-row">
+          <span class="info-row-icon">🛣️</span>
+          <div class="info-row-text"><span class="info-row-label">Route</span>I-75 South the whole way — very straightforward. Through Ohio, into Kentucky, and down into Tennessee. Cross into Knoxville and take the South Knoxville exit.</div>
+        </div>
+        <div class="info-row">
+          <span class="info-row-icon">⏱️</span>
+          <div class="info-row-text"><span class="info-row-label">Drive time</span>~8 hours without stops. Plan for 9–9.5 hours with breaks.</div>
+        </div>
+        <a class="map-btn" href="https://maps.apple.com/?saddr=1612+S+Krepps+Rd,+St+Johns,+MI&daddr=3639+Lancaster+Dr,+Knoxville,+TN" target="_blank">🗺️ Open in Apple Maps</a>
+      </div>
+      <div id="reactions-dir-gp"></div>
+    </div>
+  </div>
+
+  <div class="sec-card">
+    <div class="sec-head" onclick="toggleSec('dir-airbnb-cc')">
+      <span class="sec-icon">🏛️</span>
+      <div class="sec-title-block">
+        <div class="sec-title">Airbnb → Convention Center</div>
+        <div class="sec-sub">Meet day drive · ~15 min</div>
+      </div>
+      <span class="sec-chevron" id="chev-dir-airbnb-cc">▼</span>
+    </div>
+    <div class="sec-body" id="body-dir-airbnb-cc">
+      <div class="sec-content">
+        <div class="info-row">
+          <span class="info-row-icon">🕙</span>
+          <div class="info-row-text"><span class="info-row-label">Leave by</span>10:30am for an 11:20am start. Gives you time to park and find your seats.</div>
+        </div>
+        <div class="info-row">
+          <span class="info-row-icon">🅿️</span>
+          <div class="info-row-text"><span class="info-row-label">Best parking</span><strong>State Street Garage</strong> — closest to the Convention Center. About a 3-min walk. ~$10/day. Enter from State St or Clinch Ave.</div>
+        </div>
+        <div class="info-row">
+          <span class="info-row-icon">🅿️</span>
+          <div class="info-row-text"><span class="info-row-label">Backup parking</span><strong>Locust Street Garage</strong> or street meters on Henley St (limited). Arrive early if using street.</div>
+        </div>
+        <a class="map-btn" href="https://maps.apple.com/?saddr=3639+Lancaster+Dr,+Knoxville,+TN&daddr=701+Henley+St,+Knoxville,+TN" target="_blank">🗺️ Open in Apple Maps</a>
+      </div>
+      <div id="reactions-dir-airbnb-cc"></div>
+    </div>
+  </div>
+
+  <div class="sec-card">
+    <div class="sec-head" onclick="toggleSec('dir-gatlinburg')">
+      <span class="sec-icon">⛰️</span>
+      <div class="sec-title-block">
+        <div class="sec-title">Airbnb → Gatlinburg / Smokies</div>
+        <div class="sec-sub">Saturday option · ~45 min</div>
+      </div>
+      <span class="sec-chevron" id="chev-dir-gatlinburg">▼</span>
+    </div>
+    <div class="sec-body" id="body-dir-gatlinburg">
+      <div class="sec-content">
+        <div class="info-row">
+          <span class="info-row-icon">🛣️</span>
+          <div class="info-row-text"><span class="info-row-label">Route</span>Take I-40 East toward Asheville, then exit 407 for US-66 South toward Sevierville. Follow TN-441 into Pigeon Forge and Gatlinburg. Very scenic drive.</div>
+        </div>
+        <div class="info-row">
+          <span class="info-row-icon">⏱️</span>
+          <div class="info-row-text"><span class="info-row-label">Drive time</span>~45 min to Gatlinburg. Can be longer in peak season weekends — leave early!</div>
+        </div>
+        <div class="info-row">
+          <span class="info-row-icon">🅿️</span>
+          <div class="info-row-text"><span class="info-row-label">Parking</span>Multiple city lots in Gatlinburg. Anakeesta has a tram from the main street. Paid lots $10–20/day.</div>
+        </div>
+        <a class="map-btn" href="https://maps.apple.com/?saddr=3639+Lancaster+Dr,+Knoxville,+TN&daddr=Gatlinburg,+TN" target="_blank">🗺️ Open in Apple Maps</a>
+      </div>
+      <div id="reactions-dir-gatlinburg"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ EAT ═══════ -->
+<div class="panel" id="panel-eat">
+
+  <div class="who-bar">
+    <div class="who-label">Who are you?</div>
+    <div class="who-row">
+      <button class="who-btn" onclick="setWho('Jon')">Jon</button>
+      <button class="who-btn" onclick="setWho('Nadia')">Nadia</button>
+      <button class="who-btn" onclick="setWho('Jani')">Jani</button>
+      <button class="who-btn" onclick="setWho('Grandma')">Grandma</button>
+      <button class="who-btn" onclick="setWho('Grandpa')">Grandpa</button>
+    </div>
+  </div>
+
+  <div class="sec-card">
+    <div class="sec-head" onclick="toggleSec('eat-airbnb')">
+      <span class="sec-icon">🏠</span>
+      <div class="sec-title-block">
+        <div class="sec-title">Near the Airbnb</div>
+        <div class="sec-sub">South Knoxville · walkable & close</div>
+      </div>
+      <span class="sec-chevron" id="chev-eat-airbnb">▼</span>
+    </div>
+    <div class="sec-body" id="body-eat-airbnb">
+      <div class="sec-content">
+        <div class="place-card">
+          <div class="place-name">SoKno Taco Cantina</div>
+          <div class="place-meta"><span class="tag tag-walk">🚶 Walkable</span><span class="tag tag-dog">🐕 Dog Friendly</span>⭐ 4.4</div>
+          <div class="place-desc">Colorful neighborhood taco spot right near the house. Great outdoor patio, solid margaritas for the adults, and a menu everyone will find something on. One of the closest spots to the Airbnb.</div>
+          <a class="map-btn" href="https://maps.apple.com/?q=SoKno+Taco+Cantina+Knoxville" target="_blank">🗺️ Directions</a>
+        </div>
+        <div class="place-card">
+          <div class="place-name">Round Up Restaurant</div>
+          <div class="place-meta"><span class="tag tag-walk">🚶 Walkable</span>⭐ 4.3</div>
+          <div class="place-desc">Classic American diner-style spot extremely close to the Airbnb. Burgers, comfort food, unpretentious — perfect for a tired Friday night when nobody wants to make decisions. Cash-friendly.</div>
+          <a class="map-btn" href="https://maps.apple.com/?q=Round+Up+Restaurant+Knoxville+TN" target="_blank">🗺️ Directions</a>
+        </div>
+        <div class="place-card">
+          <div class="place-name">Stock & Barrel</div>
+          <div class="place-meta"><span class="tag tag-drive">🚗 Short drive</span>⭐ 4.5</div>
+          <div class="place-desc">Craft burgers and local beers on Market Square downtown. Worth the short drive for a nicer sit-down Saturday dinner. The smash burgers are standout.</div>
+          <a class="map-btn" href="https://maps.apple.com/?q=Stock+and+Barrel+Knoxville" target="_blank">🗺️ Directions</a>
+        </div>
+        <div class="place-card">
+          <div class="place-name">OliBea</div>
+          <div class="place-meta"><span class="tag tag-drive">🚗 Short drive</span>⭐ 4.6 · Breakfast/Brunch</div>
+          <div class="place-desc">Knoxville's most beloved breakfast spot. Expect a wait on weekends but it's worth it. Creative egg dishes, great pastries, and strong coffee. Perfect Saturday morning fuel-up.</div>
+          <a class="map-btn" href="https://maps.apple.com/?q=OliBea+Knoxville" target="_blank">🗺️ Directions</a>
+        </div>
+      </div>
+      <div id="reactions-eat-airbnb"></div>
+    </div>
+  </div>
+
+  <div class="sec-card">
+    <div class="sec-head" onclick="toggleSec('eat-downtown')">
+      <span class="sec-icon">🏙️</span>
+      <div class="sec-title-block">
+        <div class="sec-title">Downtown & Near the Meet</div>
+        <div class="sec-sub">Market Square · Gay Street · post-meet lunch</div>
+      </div>
+      <span class="sec-chevron" id="chev-eat-downtown">▼</span>
+    </div>
+    <div class="sec-body" id="body-eat-downtown">
+      <div class="sec-content">
+        <div class="place-card">
+          <div class="place-name">Market Square</div>
+          <div class="place-meta"><span class="tag tag-walk">🚶 Walk from CC</span>⭐ Multiple options</div>
+          <div class="place-desc">The heart of downtown Knoxville — a pedestrian square with 10+ restaurants, outdoor seating, and a great vibe. Perfect for the post-meet celebratory lunch. Browse and pick whatever looks good to the crew.</div>
+          <a class="map-btn" href="https://maps.apple.com/?q=Market+Square+Knoxville" target="_blank">🗺️ Directions</a>
+        </div>
+        <div class="place-card">
+          <div class="place-name">The Old City / Gay Street</div>
+          <div class="place-meta"><span class="tag tag-walk">🚶 Near downtown</span>⭐ 4.4+</div>
+          <div class="place-desc">Knoxville's revitalized historic strip with unique restaurants, coffee shops, and local character. Great for a post-meet wander. Hit Peter Kern Library (speakeasy bar) if the adults want a cocktail after.</div>
+          <a class="map-btn" href="https://maps.apple.com/?q=Gay+Street+Knoxville" target="_blank">🗺️ Directions</a>
+        </div>
+        <div class="place-card">
+          <div class="place-name">Tupelo Honey</div>
+          <div class="place-meta"><span class="tag tag-walk">🚶 Near CC</span>⭐ 4.4 · Southern brunch</div>
+          <div class="place-desc">Southern comfort food elevated — biscuits, fried chicken, shrimp and grits. Knoxville staple and a great celebratory lunch option right near the Convention Center.</div>
+          <a class="map-btn" href="https://maps.apple.com/?q=Tupelo+Honey+Knoxville" target="_blank">🗺️ Directions</a>
+        </div>
+      </div>
+      <div id="reactions-eat-downtown"></div>
+    </div>
+  </div>
+
+  <div class="sec-card">
+    <div class="sec-head" onclick="toggleSec('eat-sevier')">
+      <span class="sec-icon">🌆</span>
+      <div class="sec-title-block">
+        <div class="sec-title">Sevier Avenue Strip</div>
+        <div class="sec-sub">South Knoxville's coolest block</div>
+      </div>
+      <span class="sec-chevron" id="chev-eat-sevier">▼</span>
+    </div>
+    <div class="sec-body" id="body-eat-sevier">
+      <div class="sec-content">
+        <div class="place-card">
+          <div class="place-name">Sevier Avenue</div>
+          <div class="place-meta"><span class="tag tag-drive">🚗 5 min drive</span>⭐ Local favorite strip</div>
+          <div class="place-desc">South Knoxville's answer to downtown — a stretch of bars, restaurants, and coffee shops with a neighborhood feel. Less tourist-y than downtown. Great for Saturday evening if you want something local and laid-back. Try Blue Slip Winery, Hi-Wire Brewing, or Suttree's.</div>
+          <a class="map-btn" href="https://maps.apple.com/?q=Sevier+Avenue+Knoxville" target="_blank">🗺️ Directions</a>
+        </div>
+      </div>
+      <div id="reactions-eat-sevier"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ EXPLORE ═══════ -->
+<div class="panel" id="panel-explore">
+
+  <div class="who-bar">
+    <div class="who-label">Who are you?</div>
+    <div class="who-row">
+      <button class="who-btn" onclick="setWho('Jon')">Jon</button>
+      <button class="who-btn" onclick="setWho('Nadia')">Nadia</button>
+      <button class="who-btn" onclick="setWho('Jani')">Jani</button>
+      <button class="who-btn" onclick="setWho('Grandma')">Grandma</button>
+      <button class="who-btn" onclick="setWho('Grandpa')">Grandpa</button>
+    </div>
+  </div>
+
+  <div class="sec-card">
+    <div class="sec-head" onclick="toggleSec('exp-local')">
+      <span class="sec-icon">🌲</span>
+      <div class="sec-title-block">
+        <div class="sec-title">Right Out the Door</div>
+        <div class="sec-sub">South Knoxville Urban Wilderness · walkable</div>
+      </div>
+      <span class="sec-chevron" id="chev-exp-local">▼</span>
+    </div>
+    <div class="sec-body" id="body-exp-local">
+      <div class="sec-content">
+        <div class="place-card">
+          <div class="place-name">Baker Creek Preserve</div>
+          <div class="place-meta"><span class="tag tag-walk">🚶 Steps from Airbnb</span><span class="tag tag-dog">🐕 Dogs Welcome</span>⭐ 4.7</div>
+          <div class="place-desc">A beautiful 120-acre nature preserve with gentle trails through forest and along the creek. Literally walkable from the Airbnb — perfect morning or evening stroll. Easy terrain, great for everyone in the group.</div>
+          <a class="map-btn" href="https://maps.apple.com/?q=Baker+Creek+Preserve+Knoxville" target="_blank">🗺️ Directions</a>
+        </div>
+        <div class="place-card">
+          <div class="place-name">Urban Wilderness Gateway Park</div>
+          <div class="place-meta"><span class="tag tag-walk">🚶 Very close</span><span class="tag tag-dog">🐕 Dog Friendly</span>⭐ 4.6</div>
+          <div class="place-desc">50+ miles of connected trails across South Knoxville's ridge system. The Gateway trailhead is the main entry point and has parking, maps, and easy access to the full network. Great for a longer Saturday morning hike.</div>
+          <a class="map-btn" href="https://maps.apple.com/?q=Urban+Wilderness+Gateway+Park+Knoxville" target="_blank">🗺️ Directions</a>
+        </div>
+        <div class="place-card">
+          <div class="place-name">Ijams Nature Center</div>
+          <div class="place-meta"><span class="tag tag-drive">🚗 5 min</span><span class="tag tag-dog">🐕 Dog Friendly</span>⭐ 4.7</div>
+          <div class="place-desc">Knoxville's crown jewel nature park — 300 acres with trails, a visitor center, kayak/canoe rentals on the river, and stunning quarry swimming holes. Something for every energy level. One of the best places in the city.</div>
+          <a class="map-btn" href="https://maps.apple.com/?q=Ijams+Nature+Center+Knoxville" target="_blank">🗺️ Directions</a>
+        </div>
+        <div class="place-card">
+          <div class="place-name">Fort Dickerson / Mead's Quarry</div>
+          <div class="place-meta"><span class="tag tag-drive">🚗 5 min</span>⭐ 4.5 · Swimming</div>
+          <div class="place-desc">Stunning old quarry now open for swimming in brilliant blue-green water. Extremely popular with locals on hot days. The ruins and cliffs make it feel like a secret spot even though everyone knows about it. Bring towels.</div>
+          <a class="map-btn" href="https://maps.apple.com/?q=Fort+Dickerson+Park+Knoxville" target="_blank">🗺️ Directions</a>
+        </div>
+        <div class="place-card">
+          <div class="place-name">Suttree Landing Park</div>
+          <div class="place-meta"><span class="tag tag-drive">🚗 8 min</span><span class="tag tag-dog">🐕 Dog Friendly</span>⭐ 4.6</div>
+          <div class="place-desc">Beautiful riverside park along the Tennessee River with greenway trails, a boat launch, and a great view of downtown across the water. Easy, flat walking — excellent option for the whole group including Grandpa.</div>
+          <a class="map-btn" href="https://maps.apple.com/?q=Suttree+Landing+Park+Knoxville" target="_blank">🗺️ Directions</a>
+        </div>
+      </div>
+      <div id="reactions-exp-local"></div>
+    </div>
+  </div>
+
+  <div class="sec-card">
+    <div class="sec-head" onclick="toggleSec('exp-smokies')">
+      <span class="sec-icon">⛰️</span>
+      <div class="sec-title-block">
+        <div class="sec-title">Gatlinburg & the Smokies</div>
+        <div class="sec-sub">Saturday big adventure · ~45 min drive</div>
+      </div>
+      <span class="sec-chevron" id="chev-exp-smokies">▼</span>
+    </div>
+    <div class="sec-body" id="body-exp-smokies">
+      <div class="sec-content">
+        <div class="place-card">
+          <div class="place-name">Anakeesta</div>
+          <div class="place-meta"><span class="tag tag-kid">👧 Great for Kids</span>⭐ 4.7 · Mountain theme park</div>
+          <div class="place-desc">Mountaintop adventure park accessible by gondola with treetop walks, zip lines, a chondola ride, and stunning 360° Smoky Mountain views. One of the most memorable experiences in the area — the kids will love it and the views are incredible for everyone.</div>
+          <a class="map-btn" href="https://maps.apple.com/?q=Anakeesta+Gatlinburg" target="_blank">🗺️ Directions</a>
+        </div>
+        <div class="place-card">
+          <div class="place-name">SkyLift Park & SkyBridge</div>
+          <div class="place-meta"><span class="tag tag-kid">👧 Kids Love It</span>⭐ 4.5</div>
+          <div class="place-desc">America's highest pedestrian suspension bridge — 680 feet above Gatlinburg with jaw-dropping valley views. Reached via a classic chairlift. Takes about an hour total and is genuinely thrilling.</div>
+          <a class="map-btn" href="https://maps.apple.com/?q=SkyLift+Park+Gatlinburg" target="_blank">🗺️ Directions</a>
+        </div>
+        <div class="place-card">
+          <div class="place-name">Great Smoky Mountains National Park</div>
+          <div class="place-meta">⭐ Free to enter · Stunning scenic drives</div>
+          <div class="place-desc">The park entrance is minutes from Gatlinburg. For an accessible adventure, the Cades Cove Loop Road is a 11-mile one-way scenic drive with wildlife (bears, deer, elk), historic farmsteads, and pull-offs anyone can enjoy from the car or with minimal walking.</div>
+          <a class="map-btn" href="https://maps.apple.com/?q=Cades+Cove+Loop+Road+Tennessee" target="_blank">🗺️ Cades Cove</a>
+        </div>
+        <div class="place-card">
+          <div class="place-name">Ripley's Aquarium of the Smokies</div>
+          <div class="place-meta"><span class="tag tag-kid">👧 Kids' Favorite</span>⭐ 4.6 · Gatlinburg</div>
+          <div class="place-desc">One of the top-rated aquariums in the country. Massive shark tunnel where you ride a moving walkway through the tank. Completely accessible, air-conditioned, and endlessly entertaining for all ages. A solid rainy-day backup too.</div>
+          <a class="map-btn" href="https://maps.apple.com/?q=Ripley's+Aquarium+Gatlinburg" target="_blank">🗺️ Directions</a>
+        </div>
+      </div>
+      <div id="reactions-exp-smokies"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ MEET DAY ═══════ -->
+<div class="panel" id="panel-meet">
+
+  <div class="who-bar">
+    <div class="who-label">Who are you?</div>
+    <div class="who-row">
+      <button class="who-btn" onclick="setWho('Jon')">Jon</button>
+      <button class="who-btn" onclick="setWho('Nadia')">Nadia</button>
+      <button class="who-btn" onclick="setWho('Jani')">Jani</button>
+      <button class="who-btn" onclick="setWho('Grandma')">Grandma</button>
+      <button class="who-btn" onclick="setWho('Grandpa')">Grandpa</button>
+    </div>
+  </div>
+
+  <div class="sec-card">
+    <div class="sec-head" onclick="toggleSec('meet-info')">
+      <span class="sec-icon">🏅</span>
+      <div class="sec-title-block">
+        <div class="sec-title">AAU Nationals — Nadia</div>
+        <div class="sec-sub">Sunday June 22 · 11:20am start</div>
+      </div>
+      <span class="sec-chevron on" id="chev-meet-info">▼</span>
+    </div>
+    <div class="sec-body open" id="body-meet-info">
+      <div class="sec-content">
+        <div class="info-row"><span class="info-row-icon">📍</span><div class="info-row-text"><span class="info-row-label">Venue</span>Knoxville Convention Center<br>701 Henley Street, Knoxville, TN 37902</div></div>
+        <div class="info-row"><span class="info-row-icon">🕙</span><div class="info-row-text"><span class="info-row-label">Session start</span>11:20am · Arrive by 10:45am</div></div>
+        <div class="info-row"><span class="info-row-icon">🅿️</span><div class="info-row-text"><span class="info-row-label">Best parking</span>State Street Garage (closest, ~3 min walk) or Locust Street Garage. Both ~$10–15/day.</div></div>
+        <div class="info-row"><span class="info-row-icon">🎽</span><div class="info-row-text"><span class="info-row-label">What to bring</span>Comfortable shoes, a light layer (convention centers run cold), snacks, phone charger, and your loudest cheers.</div></div>
+        <div class="info-row"><span class="info-row-icon">🚗</span><div class="info-row-text"><span class="info-row-label">Drive time</span>~15 min from the Airbnb. Leave by 10:30am to be safe.</div></div>
+        <a class="map-btn" href="https://maps.apple.com/?saddr=3639+Lancaster+Dr,+Knoxville,+TN&daddr=701+Henley+St,+Knoxville,+TN" target="_blank">🗺️ Directions to Convention Center</a>
+      </div>
+      <div id="reactions-meet-info"></div>
+    </div>
+  </div>
+
+  <div class="sec-card">
+    <div class="sec-head" onclick="toggleSec('meet-after')">
+      <span class="sec-icon">🎉</span>
+      <div class="sec-title-block">
+        <div class="sec-title">After the Meet</div>
+        <div class="sec-sub">Celebrate! · Downtown options</div>
+      </div>
+      <span class="sec-chevron" id="chev-meet-after">▼</span>
+    </div>
+    <div class="sec-body" id="body-meet-after">
+      <div class="sec-content">
+        <div class="place-card">
+          <div class="place-name">Market Square</div>
+          <div class="place-meta"><span class="tag tag-walk">🚶 Walk from CC</span>⭐ Tons of options</div>
+          <div class="place-desc">Knoxville's central square — 5 min walk from the Convention Center. Pick a spot that appeals to the group. Popular picks: Stock & Barrel (burgers), Tupelo Honey (Southern), or Treetops (casual American). Perfect for a big celebratory group meal.</div>
+          <a class="map-btn" href="https://maps.apple.com/?q=Market+Square+Knoxville" target="_blank">🗺️ Directions</a>
+        </div>
+        <div class="place-card">
+          <div class="place-name">Tennessee River Waterfront</div>
+          <div class="place-meta"><span class="tag tag-walk">🚶 Near downtown</span>⭐ Great views</div>
+          <div class="place-desc">Walk down to the river after lunch for a quick stroll and views of the Smoky Mountains. The Walnut Street pedestrian bridge and Volunteer Landing park are right there. Nice way to stretch your legs before the drive home.</div>
+          <a class="map-btn" href="https://maps.apple.com/?q=Volunteer+Landing+Knoxville" target="_blank">🗺️ Directions</a>
+        </div>
+      </div>
+      <div id="reactions-meet-after"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════
+//  SUPABASE CONFIG
+// ══════════════════════════════════════
+const SB_URL = 'https://erbehfbmvemlwnzlesxw.supabase.co/rest/v1';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVyYmVoZmJtdmVtbHduemxlc3h3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzNjM1NTAsImV4cCI6MjA5NTkzOTU1MH0.X50PXOWS8RazO7PVs-MPHwtqPqZ4GRl9I7PkQm9aTY0';
+const HEADERS = { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json' };
+
+// ══════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════
+let who = null;
+let allComments = {};  // { sectionId: [{id,author,body,created_at}] }
+let allThumbs = {};    // { sectionId: [authorName, ...] }
+let openComments = {};
+
+// All section IDs that have reaction bars
+const SECTIONS = [
+  'fri','sat','sun',
+  'dir-gp','dir-airbnb-cc','dir-gatlinburg',
+  'eat-airbnb','eat-downtown','eat-sevier',
+  'exp-local','exp-smokies',
+  'meet-info','meet-after'
+];
+
+// ══════════════════════════════════════
+//  LOAD DATA
+// ══════════════════════════════════════
+async function loadAll() {
+  try {
+    const [cRows, tRows] = await Promise.all([
+      fetch(`${SB_URL}/knox_comments?select=*&order=created_at.asc`, { headers: HEADERS }).then(r => r.json()),
+      fetch(`${SB_URL}/knox_thumbs?select=*`, { headers: HEADERS }).then(r => r.json()),
+    ]);
+    allComments = {};
+    allThumbs = {};
+    SECTIONS.forEach(s => { allComments[s] = []; allThumbs[s] = []; });
+    (cRows || []).forEach(r => { if (allComments[r.section_id]) allComments[r.section_id].push(r); });
+    (tRows || []).forEach(r => { if (allThumbs[r.section_id]) allThumbs[r.section_id].push(r.author); });
+    renderAllReactions();
+  } catch(e) {
+    console.error('Load error:', e);
+  }
+}
+
+// ══════════════════════════════════════
+//  RENDER REACTIONS
+// ══════════════════════════════════════
+function renderAllReactions() {
+  SECTIONS.forEach(sid => renderReaction(sid));
+}
+
+function renderReaction(sid) {
+  const el = document.getElementById('reactions-' + sid);
+  if (!el) return;
+  const thumbs = allThumbs[sid] || [];
+  const comments = allComments[sid] || [];
+  const myThumb = who && thumbs.includes(who);
+  const isOpen = openComments[sid];
+
+  const commentsHTML = comments.map(c => `
+    <div class="comment-item">
+      <div class="comment-author">${escHtml(c.author)}</div>
+      <div class="comment-body">${escHtml(c.body)}</div>
+    </div>`).join('');
+
+  const thumbNames = thumbs.map(n => `<span class="thumb-name">${escHtml(n)}</span>`).join('');
+
+  el.innerHTML = `
+    <div class="reaction-bar">
+      <div class="reaction-top">
+        <button class="thumb-btn${myThumb ? ' on' : ''}" onclick="toggleThumb('${sid}')">
+          👍 <span>${thumbs.length > 0 ? thumbs.length : ''}</span>
+        </button>
+        ${thumbNames ? `<div class="thumbs-list">${thumbNames}</div>` : ''}
+        <div class="comments-toggle" onclick="toggleComments('${sid}')">
+          💬 ${comments.length > 0 ? comments.length + ' comment' + (comments.length > 1 ? 's' : '') : 'Comment'}
+          <span>${isOpen ? '▲' : '▼'}</span>
+        </div>
+      </div>
+      <div class="comments-area${isOpen ? ' open' : ''}" id="carea-${sid}">
+        <div id="clist-${sid}">${commentsHTML}</div>
+        <div class="comment-input-row">
+          <input class="comment-input" id="cinp-${sid}"
+            placeholder="${who ? 'Say something, ' + who + '...' : 'Pick your name at the top first'}"
+            ${!who ? 'disabled' : ''}
+            onkeydown="if(event.key==='Enter')submitComment('${sid}')">
+          <button class="comment-submit" onclick="submitComment('${sid}')">→</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+// ══════════════════════════════════════
+//  THUMB
+// ══════════════════════════════════════
+async function toggleThumb(sid) {
+  if (!who) { showToast('Pick your name at the top first! ☝️'); return; }
+  const thumbs = allThumbs[sid] || [];
+  const hasThumb = thumbs.includes(who);
+
+  // Optimistic
+  if (hasThumb) {
+    allThumbs[sid] = thumbs.filter(n => n !== who);
+  } else {
+    allThumbs[sid] = [...thumbs, who];
+  }
+  renderReaction(sid);
+
+  try {
+    if (hasThumb) {
+      await fetch(`${SB_URL}/knox_thumbs?section_id=eq.${sid}&author=eq.${who}`, {
+        method: 'DELETE', headers: { ...HEADERS, 'Prefer': 'return=minimal' }
+      });
+    } else {
+      // Delete first (safety), then insert
+      await fetch(`${SB_URL}/knox_thumbs?section_id=eq.${sid}&author=eq.${who}`, {
+        method: 'DELETE', headers: { ...HEADERS, 'Prefer': 'return=minimal' }
+      });
+      const res = await fetch(`${SB_URL}/knox_thumbs`, {
+        method: 'POST',
+        headers: { ...HEADERS, 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ section_id: sid, author: who })
+      });
+      if (!res.ok) throw new Error(await res.text());
+    }
+    showToast(hasThumb ? 'Thumbs up removed' : '👍 Nice!');
+  } catch(e) {
+    console.error('Thumb error:', e);
+    // Revert
+    allThumbs[sid] = thumbs;
+    renderReaction(sid);
+    showToast('⚠️ Didn\'t save — try again');
+  }
+}
+
+// ══════════════════════════════════════
+//  COMMENT
+// ══════════════════════════════════════
+function toggleComments(sid) {
+  openComments[sid] = !openComments[sid];
+  const area = document.getElementById('carea-' + sid);
+  if (area) area.classList.toggle('open', openComments[sid]);
+  const toggle = area?.previousElementSibling?.querySelector('.comments-toggle span');
+  if (toggle) toggle.textContent = openComments[sid] ? '▲' : '▼';
+}
+
+async function submitComment(sid) {
+  if (!who) { showToast('Pick your name at the top first! ☝️'); return; }
+  const inp = document.getElementById('cinp-' + sid);
+  const body = (inp?.value || '').trim();
+  if (!body) return;
+  const temp = { id: 'tmp' + Date.now(), section_id: sid, author: who, body, created_at: new Date().toISOString() };
+  allComments[sid] = [...(allComments[sid] || []), temp];
+  inp.value = '';
+  renderReaction(sid);
+  // Reopen
+  setTimeout(() => {
+    const area = document.getElementById('carea-' + sid);
+    if (area) area.classList.add('open');
+    openComments[sid] = true;
+  }, 10);
+  try {
+    const res = await fetch(`${SB_URL}/knox_comments`, {
+      method: 'POST',
+      headers: { ...HEADERS, 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ section_id: sid, author: who, body })
+    });
+    if (!res.ok) throw new Error(await res.text());
+    showToast('💬 Comment saved!');
+  } catch(e) {
+    showToast('⚠️ Comment didn\'t save');
+    allComments[sid] = allComments[sid].filter(c => c.id !== temp.id);
+    renderReaction(sid);
+  }
+}
+
+// ══════════════════════════════════════
+//  WHO + TABS + SECTIONS
+// ══════════════════════════════════════
+function setWho(name) {
+  who = name;
+  document.querySelectorAll('.who-btn').forEach(b => {
+    b.classList.toggle('on', b.textContent === name);
+  });
+  showToast('Hi ' + name + '! 👋');
+  renderAllReactions();
+}
+
+function switchTab(id, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('on'));
+  document.getElementById('panel-' + id).classList.add('on');
+  el.classList.add('on');
+}
+
+function toggleSec(id) {
+  const body = document.getElementById('body-' + id);
+  const chev = document.getElementById('chev-' + id);
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  if (chev) {
+    chev.textContent = isOpen ? '▼' : '▼';
+    chev.classList.toggle('open', !isOpen);
+  }
+}
+
+// ══════════════════════════════════════
+//  TOAST + UTILS
+// ══════════════════════════════════════
+let toastTimer;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2400);
+}
+
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ══════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════
+loadAll();
+</script>
+</body>
+</html>
