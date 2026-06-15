@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nadia's Checklist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --accent: #7F77DD;
+      --accent-light: #F0EFFB;
+      --accent-mid: #C8C5F5;
+      --green: #1D9E75;
+      --green-light: #E1F5EE;
+      --text: #1a1a18;
+      --muted: #888780;
+      --border: #E8E6DF;
+      --bg: #F7F6F2;
+      --card: #FFFFFF;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); min-height: 100vh; padding-bottom: 48px; }
+    .header { background: var(--card); padding: 20px 20px 16px; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10; }
+    .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .greeting { font-family: 'DM Serif Display', serif; font-size: 26px; color: var(--text); }
+    .date-line { font-size: 13px; color: var(--muted); margin-top: 2px; }
+    .avatar { width: 42px; height: 42px; border-radius: 50%; background: var(--accent); color: white; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 600; }
+    .progress-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+    .progress-track { height: 5px; background: var(--border); border-radius: 99px; overflow: hidden; }
+    .progress-fill { height: 5px; background: var(--accent); border-radius: 99px; width: 0%; transition: width 0.35s ease; }
+    .earnings-banner { margin: 14px 16px 0; background: var(--accent-light); border: 1px solid var(--accent-mid); border-radius: 14px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; }
+    .earnings-label { font-size: 12px; color: var(--accent); font-weight: 500; }
+    .earnings-amount { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--accent); }
+    .earnings-today { font-size: 11px; font-weight: 600; background: var(--accent); color: white; border-radius: 99px; padding: 4px 10px; }
+    .tasks { padding: 14px 16px 0; }
+    .section-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 10px; }
+    .task-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 14px 16px; margin-bottom: 8px; display: flex; align-items: flex-start; gap: 14px; cursor: pointer; transition: border-color 0.2s, background 0.2s; -webkit-tap-highlight-color: transparent; }
+    .task-card.done { border-color: var(--accent-mid); background: var(--accent-light); }
+    .check { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--border); flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .task-card.done .check { background: var(--accent); border-color: var(--accent); }
+    .check svg { display: none; }
+    .task-card.done .check svg { display: block; }
+    .task-body { flex: 1; }
+    .task-title { font-size: 15px; font-weight: 500; color: var(--text); }
+    .task-card.done .task-title { color: var(--accent); }
+    .task-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .task-input-wrap { margin-top: 10px; display: none; }
+    .task-card.done .task-input-wrap { display: block; }
+    .task-input { width: 100%; border: 1px solid var(--accent-mid); border-radius: 8px; padding: 8px 10px; font-size: 13px; color: var(--text); background: white; font-family: 'DM Sans', sans-serif; }
+    .task-input:focus { outline: none; border-color: var(--accent); }
+    .note-section { padding: 8px 16px 0; }
+    .note-input { width: 100%; border: 1px solid var(--border); border-radius: 14px; padding: 12px 14px; font-size: 13px; color: var(--text); background: var(--card); resize: none; font-family: 'DM Sans', sans-serif; }
+    .note-input:focus { outline: none; border-color: var(--accent); }
+    .submit-area { padding: 16px 16px 0; }
+    .submit-btn { width: 100%; padding: 16px; background: var(--accent); color: white; border: none; border-radius: 14px; font-size: 16px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: opacity 0.2s; }
+    .submit-btn:disabled { background: var(--border); color: var(--muted); cursor: default; }
+    .submit-hint { text-align: center; font-size: 12px; color: var(--muted); margin-top: 8px; }
+    .success-screen { display: none; text-align: center; padding: 60px 32px 40px; }
+    .success-circle { width: 72px; height: 72px; border-radius: 50%; background: var(--green-light); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+    .success-title { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--text); margin-bottom: 8px; }
+    .success-sub { font-size: 14px; color: var(--muted); line-height: 1.6; }
+    .success-earned { margin-top: 24px; background: var(--card); border-radius: 16px; padding: 20px; border: 1px solid var(--border); }
+    .success-earned-label { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+    .success-earned-total { font-family: 'DM Serif Display', serif; font-size: 40px; color: var(--accent); }
+    .success-earned-sub { font-size: 12px; color: var(--muted); margin-top: 6px; }
+  </style>
+</head>
+<body>
+
+<div id="main-view">
+  <div style="padding: 10px 20px; background: #FAFAF8; border-bottom: 0.5px solid #E8E6DF;"><a href="/" style="font-size:13px; color:#888780; text-decoration:none;">← Home</a></div>
+  <div class="header">
+    <div class="header-top">
+      <div>
+        <div class="greeting">Hey, Nadia!</div>
+        <div class="date-line" id="date-line">Loading...</div>
+      </div>
+      <div class="avatar">N</div>
+    </div>
+    <div class="progress-meta">
+      <span id="prog-label">0 of 6 done</span>
+      <span id="prog-pct">0%</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="prog-fill"></div></div>
+  </div>
+
+  <div class="earnings-banner">
+    <div>
+      <div class="earnings-label">Earned this summer</div>
+      <div class="earnings-amount" id="earnings-display">$0.00</div>
+    </div>
+    <div class="earnings-today">+$1.00 today if you finish</div>
+  </div>
+
+  <div class="tasks">
+    <div class="section-label" style="margin-top:14px;">Complete to unlock screen time</div>
+
+    <div class="task-card" onclick="toggleTask(this)" data-id="room">
+      <div class="check"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><polyline points="2.5,6.5 5.5,9.5 10.5,3.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="task-body"><div class="task-title">Room reset</div><div class="task-meta">Trash, clothes, dresser cleared</div></div>
+    </div>
+
+    <div class="task-card" onclick="toggleTask(this)" data-id="reading">
+      <div class="check"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><polyline points="2.5,6.5 5.5,9.5 10.5,3.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="task-body"><div class="task-title">Reading</div><div class="task-meta">20 min — anything you want</div>
+        <div class="task-input-wrap"><input class="task-input" data-label="Reading" placeholder="What did you read?" onclick="event.stopPropagation()"></div>
+      </div>
+    </div>
+
+    <div class="task-card" onclick="toggleTask(this)" data-id="duolingo">
+      <div class="check"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><polyline points="2.5,6.5 5.5,9.5 10.5,3.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="task-body"><div class="task-title">Duolingo</div><div class="task-meta">15 min — keep your streak</div>
+        <div class="task-input-wrap"><input class="task-input" data-label="Duolingo" placeholder="Language + where you left off" onclick="event.stopPropagation()"></div>
+      </div>
+    </div>
+
+    <div class="task-card" onclick="toggleTask(this)" data-id="project">
+      <div class="check"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><polyline points="2.5,6.5 5.5,9.5 10.5,3.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="task-body"><div class="task-title">Personal project</div><div class="task-meta">30 min — music / your song</div>
+        <div class="task-input-wrap"><input class="task-input" data-label="Personal project" placeholder="What did you work on?" onclick="event.stopPropagation()"></div>
+      </div>
+    </div>
+
+    <div class="task-card" onclick="toggleTask(this)" data-id="exercise">
+      <div class="check"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><polyline points="2.5,6.5 5.5,9.5 10.5,3.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="task-body"><div class="task-title">Get moving</div><div class="task-meta">Pool, trampoline, bike ride...</div>
+        <div class="task-input-wrap"><input class="task-input" data-label="Exercise" placeholder="What did you do?" onclick="event.stopPropagation()"></div>
+      </div>
+    </div>
+
+    <div class="task-card" onclick="toggleTask(this)" data-id="together">
+      <div class="check"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><polyline points="2.5,6.5 5.5,9.5 10.5,3.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="task-body"><div class="task-title">Together time</div><div class="task-meta">With Dad — his call or yours</div>
+        <div class="task-input-wrap"><input class="task-input" data-label="Together time" placeholder="What did you do together?" onclick="event.stopPropagation()"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note-section" style="margin-top:10px;">
+    <div class="section-label">Note for Dad (optional)</div>
+    <textarea class="note-input" id="dad-note" rows="2" placeholder="Anything you want to tell him..."></textarea>
+  </div>
+
+  <div class="submit-area">
+    <button class="submit-btn" id="submit-btn" disabled onclick="submitChecklist()">Complete all tasks to submit</button>
+    <div class="submit-hint" id="submit-hint">Finish everything above first</div>
+  </div>
+</div>
+
+<div class="success-screen" id="success-view">
+  <div class="success-circle">
+    <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><polyline points="7,18 14,25 29,10" stroke="#1D9E75" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+  <div class="success-title">Day complete!</div>
+  <div class="success-sub">Dad got your summary.<br>Screen time unlocked — you earned it.</div>
+  <div class="success-earned">
+    <div class="success-earned-label">Total earned this summer</div>
+    <div class="success-earned-total" id="final-earned">$0.00</div>
+    <div class="success-earned-sub">Keep it up! 🔥</div>
+  </div>
+</div>
+
+<script>
+  const SCRIPT_URL = 'https://kus-backend.onrender.com';
+  const WHO = 'nadia';
+  const TOTAL = 6;
+  let doneCount = 0;
+
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const now = new Date();
+  document.getElementById('date-line').textContent = days[now.getDay()] + ', ' + months[now.getMonth()] + ' ' + now.getDate();
+
+  loadEarnings();
+
+  function loadEarnings() {
+    fetch(SCRIPT_URL + '/status?who=' + WHO)
+      .then(r => r.json())
+      .then(d => {
+        if (d.earned !== undefined) document.getElementById('earnings-display').textContent = '$' + parseFloat(d.earned).toFixed(2);
+        if (d.alreadySubmitted) showAlreadyDone(d.earned);
+      })
+      .catch(() => {});
+  }
+
+  function toggleTask(card) {
+    const was = card.classList.contains('done');
+    card.classList.toggle('done');
+    doneCount += was ? -1 : 1;
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const pct = Math.round((doneCount / TOTAL) * 100);
+    document.getElementById('prog-fill').style.width = pct + '%';
+    document.getElementById('prog-label').textContent = doneCount + ' of ' + TOTAL + ' done';
+    document.getElementById('prog-pct').textContent = pct + '%';
+    const btn = document.getElementById('submit-btn');
+    const hint = document.getElementById('submit-hint');
+    if (doneCount === TOTAL) {
+      btn.disabled = false;
+      btn.textContent = 'Submit to Dad ✓';
+      hint.textContent = 'All done! Hit submit when ready.';
+    } else {
+      btn.disabled = true;
+      btn.textContent = 'Complete all tasks to submit';
+      hint.textContent = 'Finish everything above first';
+    }
+  }
+
+  function submitChecklist() {
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+
+    const responses = [];
+    document.querySelectorAll('.task-input').forEach(inp => {
+      if (inp.value.trim()) responses.push({ label: inp.dataset.label, value: inp.value.trim() });
+    });
+
+    const payload = {
+      who: WHO,
+      completedCount: doneCount,
+      totalCount: TOTAL,
+      allDone: doneCount === TOTAL,
+      responses: responses,
+      noteForDad: document.getElementById('dad-note').value || '',
+    };
+
+    fetch(SCRIPT_URL + '/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data.status === 'ok' || data.status === 'already_submitted') {
+        if (data.earned !== undefined) document.getElementById('final-earned').textContent = '$' + parseFloat(data.earned).toFixed(2);
+        document.getElementById('main-view').style.display = 'none';
+        document.getElementById('success-view').style.display = 'block';
+        window.scrollTo(0, 0);
+      }
+    })
+    .catch(() => {
+      btn.disabled = false;
+      btn.textContent = 'Submit to Dad ✓';
+      alert('Something went wrong — check your connection and try again.');
+    });
+  }
+
+  function showAlreadyDone(earned) {
+    document.getElementById('main-view').innerHTML = `
+      <div style="text-align:center; padding: 60px 32px;">
+        <div style="font-family:'DM Serif Display',serif; font-size:26px; color:#1a1a18; margin-bottom:8px;">All done for today!</div>
+        <div style="font-size:14px; color:#888780; line-height:1.6;">You already submitted your checklist.<br>Dad got your summary. Screen time unlocked.</div>
+        <div style="margin-top:24px; background:white; border-radius:16px; padding:20px; border:1px solid #E8E6DF;">
+          <div style="font-size:12px; color:#888780; margin-bottom:4px;">Earned this summer</div>
+          <div style="font-family:'DM Serif Display',serif; font-size:40px; color:#7F77DD;">$${parseFloat(earned||0).toFixed(2)}</div>
+        </div>
+      </div>`;
+  }
+</script>
+</body>
+</html>
