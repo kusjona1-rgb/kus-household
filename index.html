@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Kus Household</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream: #FAF8F3;
+      --warm: #F2EDE3;
+      --ink: #1C1A16;
+      --muted: #7A7669;
+      --accent: #D4537E;
+      --teal: #1D9E75;
+      --purple: #7F77DD;
+      --border: #E8E3D8;
+      --card: #FFFFFF;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 16px 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(250,248,243,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Fraunces', serif;
+      font-size: 20px; font-weight: 700;
+      color: var(--ink); text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 24px; align-items: center; }
+    .nav-links a {
+      font-size: 14px; color: var(--muted);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-dog {
+      font-size: 20px; cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .nav-dog:hover { transform: scale(1.2) rotate(-10deg); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      padding-top: 70px;
+      position: relative; overflow: hidden;
+    }
+    .hero-image-wrap {
+      width: 100%; height: 60vh; min-height: 320px;
+      position: relative; overflow: hidden;
+    }
+    .hero-image-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center center;
+    }
+    .hero-image-wrap::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, transparent 40%, var(--cream) 100%);
+    }
+    .hero-text {
+      padding: 0 24px 40px;
+      text-align: center;
+      animation: fadeUp 0.8s ease both;
+    }
+    .hero-eyebrow {
+      font-size: 12px; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .hero-title {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(40px, 10vw, 80px);
+      line-height: 1.05; font-weight: 700;
+      color: var(--ink); margin-bottom: 16px;
+    }
+    .hero-title em {
+      font-style: italic; color: var(--accent);
+    }
+    .hero-sub {
+      font-size: 16px; color: var(--muted);
+      max-width: 400px; margin: 0 auto 32px;
+      line-height: 1.6;
+    }
+
+    /* ── SECTION TITLES ── */
+    .section { padding: 48px 24px; }
+    .section-label {
+      font-size: 11px; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 8px;
+    }
+    .section-title {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(28px, 6vw, 42px);
+      font-weight: 700; line-height: 1.1;
+      margin-bottom: 24px;
+    }
+
+    /* ── PEOPLE CARDS ── */
+    .people-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px; margin-bottom: 12px;
+    }
+    .person-card {
+      border-radius: 20px; overflow: hidden;
+      position: relative; aspect-ratio: 4/3;
+      text-decoration: none; display: block;
+      background: var(--warm);
+      transition: transform 0.3s;
+    }
+    .person-card:hover { transform: translateY(-4px); }
+    .person-card img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center center;
+      transition: transform 0.4s;
+    }
+    .person-card:hover img { transform: scale(1.03); }
+    .person-card-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(28,26,22,0.75) 0%, transparent 50%);
+    }
+    .person-card-label {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 20px 16px 16px;
+      color: white;
+    }
+    .person-card-name {
+      font-family: 'Fraunces', serif;
+      font-size: 24px; font-weight: 700;
+      line-height: 1;
+    }
+    .person-card-sub {
+      font-size: 12px; opacity: 0.8; margin-top: 4px;
+    }
+    .person-card-tag {
+      position: absolute; top: 12px; right: 12px;
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 99px;
+      padding: 4px 10px;
+      font-size: 11px; color: white; font-weight: 500;
+    }
+    .nadia-card .person-card-overlay { background: linear-gradient(to top, rgba(31,91,120,0.8) 0%, transparent 50%); }
+    .jani-card .person-card-overlay { background: linear-gradient(to top, rgba(100,60,160,0.8) 0%, transparent 50%); }
+
+    /* ── PLACEHOLDER CARDS (when no photo) ── */
+    .photo-placeholder {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 8px; color: var(--muted);
+      font-size: 13px; text-align: center;
+      padding: 20px;
+      background: var(--warm);
+    }
+    .photo-placeholder-icon { font-size: 32px; }
+
+    /* ── BUSTER SECTION ── */
+    .buster-card {
+      border-radius: 20px; overflow: hidden;
+      position: relative; height: 280px;
+      background: var(--warm);
+    }
+    .buster-card img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center center;
+    }
+    .buster-card::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(28,26,22,0.65) 0%, transparent 60%);
+    }
+    .buster-label {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 24px 20px 20px; z-index: 1;
+      color: white;
+    }
+    .buster-name {
+      font-family: 'Fraunces', serif;
+      font-size: 32px; font-weight: 700;
+    }
+    .buster-sub { font-size: 13px; opacity: 0.8; margin-top: 4px; }
+    .buster-pill {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 99px;
+      padding: 4px 12px;
+      font-size: 11px; color: white; font-weight: 500;
+      margin-top: 8px;
+    }
+
+    /* ── WIDGETS ── */
+    .widgets { display: flex; flex-direction: column; gap: 12px; }
+
+    .widget {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 20px;
+    }
+    .widget-label {
+      font-size: 11px; font-weight: 500;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 12px;
+    }
+
+    /* Earnings widget */
+    .earnings-row {
+      display: flex; gap: 12px;
+    }
+    .earning-bar-wrap { flex: 1; }
+    .earning-name {
+      display: flex; justify-content: space-between;
+      font-size: 14px; font-weight: 500;
+      margin-bottom: 6px;
+    }
+    .earning-name span:last-child {
+      font-family: 'Fraunces', serif;
+      font-size: 18px;
+    }
+    .earning-track {
+      height: 8px; background: var(--warm);
+      border-radius: 99px; overflow: hidden;
+    }
+    .earning-fill {
+      height: 8px; border-radius: 99px;
+      transition: width 1s ease;
+    }
+    .fill-nadia { background: #1D9E75; }
+    .fill-jani { background: #7F77DD; }
+
+    /* Checklist status */
+    .status-row {
+      display: flex; gap: 10px;
+    }
+    .status-pill {
+      flex: 1; padding: 10px 12px;
+      border-radius: 12px;
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; font-weight: 500;
+    }
+    .status-pill.done { background: #E1F5EE; color: #085041; }
+    .status-pill.pending { background: var(--warm); color: var(--muted); }
+    .status-dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    }
+    .done .status-dot { background: #1D9E75; }
+    .pending .status-dot { background: #D3D1C7; }
+
+    /* Countdown */
+    .countdown-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+    }
+    .countdown-unit {
+      background: var(--warm); border-radius: 12px;
+      padding: 12px 8px; text-align: center;
+    }
+    .countdown-num {
+      font-family: 'Fraunces', serif;
+      font-size: 28px; font-weight: 700;
+      line-height: 1; color: var(--ink);
+    }
+    .countdown-label {
+      font-size: 10px; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.06em;
+      margin-top: 4px;
+    }
+    .countdown-event {
+      font-size: 13px; color: var(--muted);
+      margin-top: 12px; text-align: center;
+    }
+    .countdown-event strong { color: var(--ink); }
+
+    /* Family challenge */
+    .challenge-card {
+      background: linear-gradient(135deg, #1D9E75 0%, #0F6E56 100%);
+      border-radius: 14px; padding: 16px;
+      color: white;
+    }
+    .challenge-week {
+      font-size: 11px; opacity: 0.7;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+    .challenge-title {
+      font-family: 'Fraunces', serif;
+      font-size: 20px; font-weight: 700;
+      line-height: 1.2; margin-bottom: 8px;
+    }
+    .challenge-desc { font-size: 13px; opacity: 0.85; line-height: 1.5; }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 32px 24px;
+      text-align: center;
+      border-top: 1px solid var(--border);
+      color: var(--muted); font-size: 13px;
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in {
+      opacity: 0; transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: none; }
+
+    /* ── TABLET+ ── */
+    @media (min-width: 640px) {
+      .section { padding: 64px 40px; max-width: 720px; margin: 0 auto; }
+      .hero-image-wrap { height: 50vh; }
+      .buster-card { height: 360px; }
+      .widgets { flex-direction: row; flex-wrap: wrap; }
+      .widget { flex: 1; min-width: 260px; }
+    }
+    @media (min-width: 1024px) {
+      .hero-image-wrap { height: 60vh; max-height: 500px; }
+      .person-card { aspect-ratio: 16/9; }
+    }
+
+    @media (min-width: 1024px) {
+      .section { max-width: 960px; }
+      .people-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">Kus Household</a>
+  <div class="nav-links">
+    <a href="/nadia">Nadia</a>
+    <a href="/jani">Jani</a>
+    <a href="#buster" class="nav-dog" title="Buster">🐕</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-image-wrap">
+    <img src="photos/girls-hero.jpg" alt="Nadia and Jani at Disney World">
+  </div>
+  <div class="hero-text">
+    <p class="hero-eyebrow">Welcome to</p>
+    <h1 class="hero-title">The <em>Kus</em><br>Household</h1>
+    <p class="hero-sub">Nadia. Jani. Buster. Dad. Making the most of it.</p>
+  </div>
+</section>
+
+<!-- PEOPLE -->
+<section class="section fade-in">
+  <p class="section-label">The crew</p>
+  <h2 class="section-title">Pick your person</h2>
+  <div class="people-grid">
+    <a href="/nadia" class="person-card nadia-card">
+      <img src="photos/nadia-hero.jpg" alt="Nadia">
+      <div class="person-card-overlay"></div>
+      <span class="person-card-tag">Almost 13 ✨</span>
+      <div class="person-card-label">
+        <div class="person-card-name">Nadia</div>
+        <div class="person-card-sub">Music · Gymnastics · Vibes</div>
+      </div>
+    </a>
+    <a href="/jani" class="person-card jani-card">
+      <img src="photos/jani-hero.jpg" alt="Jani">
+      <div class="person-card-overlay"></div>
+      <span class="person-card-tag">Turning 10 🎉</span>
+      <div class="person-card-label">
+        <div class="person-card-name">Jani</div>
+        <div class="person-card-sub">Dance · Writing · Chaos</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- WIDGETS -->
+<section class="section fade-in" style="padding-top: 0;">
+  <p class="section-label">Right now</p>
+  <h2 class="section-title">Summer HQ</h2>
+  <div class="widgets">
+
+    <!-- Earnings leaderboard -->
+    <div class="widget">
+      <div class="widget-label">Summer earnings</div>
+      <div class="earnings-row">
+        <div class="earning-bar-wrap">
+          <div class="earning-name">
+            <span>Nadia</span>
+            <span id="nadia-earned">$0.00</span>
+          </div>
+          <div class="earning-track">
+            <div class="earning-fill fill-nadia" id="nadia-bar" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+      <div class="earnings-row" style="margin-top: 12px;">
+        <div class="earning-bar-wrap">
+          <div class="earning-name">
+            <span>Jani</span>
+            <span id="jani-earned">$0.00</span>
+          </div>
+          <div class="earning-track">
+            <div class="earning-fill fill-jani" id="jani-bar" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Checklist status -->
+    <div class="widget">
+      <div class="widget-label">Today's checklist</div>
+      <div class="status-row">
+        <div class="status-pill" id="nadia-status">
+          <div class="status-dot"></div>
+          <span>Nadia</span>
+        </div>
+        <div class="status-pill" id="jani-status">
+          <div class="status-dot"></div>
+          <span>Jani</span>
+        </div>
+      </div>
+      <div style="margin-top: 12px; display: flex; gap: 8px;">
+        <a href="/nadia" style="flex:1; text-align:center; padding: 10px; background: var(--warm); border-radius: 10px; font-size: 13px; color: var(--ink); text-decoration: none; font-weight: 500;">Nadia's list →</a>
+        <a href="/jani" style="flex:1; text-align:center; padding: 10px; background: var(--warm); border-radius: 10px; font-size: 13px; color: var(--ink); text-decoration: none; font-weight: 500;">Jani's list →</a>
+      </div>
+    </div>
+
+    <!-- Countdown -->
+    <div class="widget">
+      <div class="widget-label">Counting down to</div>
+      <div class="countdown-grid">
+        <div class="countdown-unit"><div class="countdown-num" id="cd-days">--</div><div class="countdown-label">days</div></div>
+        <div class="countdown-unit"><div class="countdown-num" id="cd-hours">--</div><div class="countdown-label">hrs</div></div>
+        <div class="countdown-unit"><div class="countdown-num" id="cd-mins">--</div><div class="countdown-label">min</div></div>
+        <div class="countdown-unit"><div class="countdown-num" id="cd-secs">--</div><div class="countdown-label">sec</div></div>
+      </div>
+      <p class="countdown-event">Michigan trip 🏕️ <strong>July 27</strong></p>
+    </div>
+
+    <!-- Family challenge -->
+    <div class="widget">
+      <div class="widget-label">This week</div>
+      <div class="challenge-card">
+        <div class="challenge-week">Family challenge</div>
+        <div class="challenge-title">Try a new restaurant together</div>
+        <div class="challenge-desc">Pick somewhere none of you have been. Everyone orders something they've never tried before.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- BUSTER -->
+<section class="section fade-in" id="buster">
+  <p class="section-label">The fourth member</p>
+  <h2 class="section-title">Buster</h2>
+  <div class="buster-card">
+    <img src="photos/buster.jpg" alt="Buster at the waterfall">
+    <div class="buster-label">
+      <div class="buster-name">Buster 🐾</div>
+      <div class="buster-sub">Adventure dog. Good boy. Best friend.</div>
+      <div class="buster-pill">Waterfall certified ✓</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>The Kus Household · <a href="/nadia">Nadia</a> · <a href="/jani">Jani</a> · Made with ♥ in South Florida</p>
+</footer>
+
+<script>
+  const BACKEND = 'https://kus-backend.onrender.com';
+
+  // Load earnings and status
+  async function loadDashboard() {
+    try {
+      const [nadiaRes, janiRes] = await Promise.all([
+        fetch(BACKEND + '/status?who=nadia'),
+        fetch(BACKEND + '/status?who=jani'),
+      ]);
+      const nadia = await nadiaRes.json();
+      const jani  = await janiRes.json();
+
+      // Earnings
+      const ne = parseFloat(nadia.earned || 0);
+      const je = parseFloat(jani.earned || 0);
+      const max = Math.max(ne, je, 10);
+
+      document.getElementById('nadia-earned').textContent = '$' + ne.toFixed(2);
+      document.getElementById('jani-earned').textContent  = '$' + je.toFixed(2);
+      document.getElementById('nadia-bar').style.width = (ne / max * 100) + '%';
+      document.getElementById('jani-bar').style.width  = (je / max * 100) + '%';
+
+      // Status
+      const ns = document.getElementById('nadia-status');
+      const js = document.getElementById('jani-status');
+      if (nadia.alreadySubmitted) ns.className = 'status-pill done';
+      else ns.className = 'status-pill pending';
+      if (jani.alreadySubmitted) js.className = 'status-pill done';
+      else js.className = 'status-pill pending';
+    } catch(e) {}
+  }
+
+  // Countdown to Michigan July 27
+  function updateCountdown() {
+    const target = new Date('2026-07-27T00:00:00');
+    const now = new Date();
+    const diff = target - now;
+    if (diff <= 0) {
+      document.getElementById('cd-days').textContent = '0';
+      document.getElementById('cd-hours').textContent = '0';
+      document.getElementById('cd-mins').textContent = '0';
+      document.getElementById('cd-secs').textContent = '0';
+      return;
+    }
+    document.getElementById('cd-days').textContent  = Math.floor(diff / 86400000);
+    document.getElementById('cd-hours').textContent = Math.floor((diff % 86400000) / 3600000);
+    document.getElementById('cd-mins').textContent  = Math.floor((diff % 3600000) / 60000);
+    document.getElementById('cd-secs').textContent  = Math.floor((diff % 60000) / 1000);
+  }
+
+  // Scroll fade-in
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  loadDashboard();
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+</script>
+</body>
+</html>
